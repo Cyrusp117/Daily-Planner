@@ -8,5 +8,36 @@
 </head>
 <body>
     <p>{{taskTitle}} </p>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="taskTitle" placeholder="Enter title of task">
+        <input type="submit" name="saveBtn" value="Save">
+        <button type="submit" name="delBtn">Delete</button>
+        <br>
+        From: <input type="date" name="f_date" value={{f_date}}>
+        <input list="f_time" name="f_time" value={{f_time}} /></label>
+        <datalist id="f_time">
+            <option value="1:00">
+            <option value="2:00">
+            <option value="3:00">
+            <option value="4:00">
+            <option value="5:00">
+            <option value="6:00">
+        </datalist>
+        <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
+        <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
+        To: <input type="date" name="t_date">
+        <input list="t_time" name="t_time">
+        <datalist id="t_time">
+            <option value="1:00">
+            <option value="2:00">
+            <option value="3:00">
+            <option value="4:00">
+            <option value="5:00">
+            <option value="6:00">
+        </datalist>
+
+        <button type="submit" name="cancelBtn">Cancel</button>
+    </form>
 </body>
 </html>
