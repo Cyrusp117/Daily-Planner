@@ -25,3 +25,8 @@ def edittask(request):
         'f_time': f_time
     }
     return render(request, 'edit_task.html', context)
+
+
+def schedule(request):
+    context = {}
+    return render(request, 'schedule.html', context)
