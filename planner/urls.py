@@ -7,3 +7,9 @@ urlpatterns = [
      url(r'^edittask$', views.edittask),
      url(r'^schedule$', views.schedule)
 ]
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+# ... the rest of your URLconf here ...
+
+urlpatterns += staticfiles_urlpatterns()

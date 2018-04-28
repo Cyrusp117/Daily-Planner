@@ -2,9 +2,11 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<title>Flat skin</title>
-
-	<script src="static/js/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" href="static/css/dhtmlxscheduler_flat.css" type="text/css"  title="no title"
+    {% load static %}
+    <script> 
+    </script>
+	<script src="{% static 'js/dhtmlxscheduler.js' %}" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="{% static 'css/dhtmlxscheduler_flat.css' %}" type="text/css"  title="no title"
 	      charset="utf-8">
 
 	<style type="text/css" >
@@ -41,6 +43,7 @@
 	</script>
 </head>
 <body onload="init();">
+this is schedule page
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
 	<div class="dhx_cal_navline">
 		<div class="dhx_cal_prev_button">&nbsp;</div>
