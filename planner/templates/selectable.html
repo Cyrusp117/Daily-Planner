@@ -13,35 +13,108 @@
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
 <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+<script src="https://apis.google.com/js/api.js"></script>
 <script>
+    // Client ID and API key from the Developer Console
+    var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
+    var API_KEY = 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg';
 
+    // Array of API discovery doc URLs for APIs used by the quickstart
+    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 
-  function onSignIn(googleUser) {
-    var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    var options = new gapi.auth2.SigninOptionsBuilder(
-      {'scope': 'email https://www.googleapis.com/auth/calendar'});
+    // Authorization scopes required by the API; multiple scopes can be
+    // included, separated by spaces.
+    var SCOPES = "https://www.googleapis.com/auth/calendar";
+    function handleClientLoad() {
+      // Loads the client library and the auth2 library together for efficiency.
+      // Loading the auth2 library is optional here since `gapi.client.init` function will load
+      // it if not already loaded. Loading it upfront can save one network request.
+      gapi.load('client:auth2', start);
+    }
 
-    var auth2 = gapi.auth2.getAuthInstance();
-    googleUser = auth2.currentUser.get();
-    googleUser.grant(options).then(
-      function(success){
-        console.log(JSON.stringify({message: "success", value: success}));
-      },
-      function(fail){
-        console.log(JSON.stringify({message: "fail", value: fail}));
+    function start() {
+      // 2. Initialize the JavaScript client library.
+      gapi.client.init({
+        'apiKey': API_KEY,
+        // Your API key will be automatically added to the Discovery Document URLs.
+        'discoveryDocs': DISCOVERY_DOCS,
+        // clientId and scope are optional if auth is not required.
+        'clientId': CLIENT_ID,
+        'scope': SCOPES,
+      }).then(function () {
+        // Listen for sign-in state changes.
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+        // Handle the initial sign-in state.
+        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      }).then(function() {
+        // 3. Initialize and make the API request.
+        return gapi.client.request({
+          'path' : 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+        })
+      }).then(function(response) {
+        console.log(response.result);
+      }, function(reason) {
+        console.log('Error: ');
       });
-  };
+    };
+    
+    function updateSigninStatus(isSignedIn) {
+      // When signin status changes, this function is called.
+      // If the signin status is changed to signedIn, we make an API call.
+      if (isSignedIn) {
+        listUpcomingEvents();
+      }
+    }
 
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  };
+    function handleSignInClick(event) {
+      // Ideally the button should only show up after gapi.client.init finishes, so that this
+      // handler won't be called before OAuth is initialized.
+      gapi.auth2.getAuthInstance().signIn();
+      handleClientLoad()
+    }
+
+    function handleSignOutClick(event) {
+      gapi.auth2.getAuthInstance().signOut();
+      handleClientLoad()
+    }
+
+    /**
+     * Print the summary and start datetime/date of the next ten events in
+     * the authorized user's calendar. If no events are found an
+     * appropriate message is printed.
+     */
+    function listUpcomingEvents() {
+      gapi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+      }).then(function(response) {
+        var events = response.result.items;
+        appendPre('Upcoming events:');
+
+        if (events.length > 0) {
+          for (i = 0; i < events.length; i++) {
+            var event = events[i];
+            var when = event.start.dateTime;
+            if (!when) {
+              when = event.start.date;
+            }
+            appendPre(event.summary + ' (' + when + ')')
+          }
+        } else {
+          appendPre('No upcoming events found.');
+        }
+      });
+    }
+    function appendPre(message) {
+      var pre = document.getElementById('content');
+      var textContent = document.createTextNode(message + '\n');
+      pre.appendChild(textContent);
+    }
 
   $(document).ready(function() {
 
@@ -98,9 +171,14 @@
 </style>
 </head>
 <body>
-  <div class="g-signin2" data-onsuccess="onSignIn"></div>
-  <button name = "accessCalendar" action="accessCalendar">accessCalendar</button>
-  <a href="#" onclick="signOut();">Sign out</a>
+  <script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
+  <button id="signin-button" onclick="handleSignInClick()">Sign In</button>
+  <button id="signout-button" onclick="handleSignOutClick()">Sign Out</button>
+  <pre id="content"></pre>
+
   <div id='calendar'></div>
 
 </body>
