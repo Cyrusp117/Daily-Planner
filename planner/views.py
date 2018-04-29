@@ -29,4 +29,5 @@ def edittask(request):
 
 def schedule(request):
     context = {}
-    return render(request, 'schedule.html', context)
+    return render(request, 'selectable.html', context)
+

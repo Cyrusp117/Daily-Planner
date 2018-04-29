@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
      url(r'^edittask$', views.edittask),
-     url(r'^schedule$', views.schedule)
+     url(r'^schedule$', views.schedule),
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
