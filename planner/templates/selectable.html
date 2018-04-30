@@ -31,7 +31,7 @@
       // it if not already loaded. Loading it upfront can save one network request.
       gapi.load('client:auth2', start);
     }
-
+    var primaryevents;
     function start() {
       // 2. Initialize the JavaScript client library.
       gapi.client.init({
@@ -44,15 +44,15 @@
       }).then(function () {
         // Listen for sign-in state changes.
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
         // Handle the initial sign-in state.
         updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
       }).then(function() {
         // 3. Initialize and make the API request.
         return gapi.client.request({
-          'path' : 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+          'path' : 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
         })
       }).then(function(response) {
+        primaryevents = response.result;
         console.log(response.result);
       }, function(reason) {
         console.log('Error: ');
@@ -146,11 +146,65 @@
       googleCalendarApiKey: 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg',
       events: {
         googleCalendarId: 'en-gb.australian#holiday@group.v.calendar.google.com'
-      }
+      },
+      color: 'black',     // an option!
+      textColor: 'yellow' // an option!
     });
 
   });
-
+  var handleSyncEvents = (function () {
+    var executed = false;
+    return function() {
+      if (!executed) {
+        executed = true;
+        var items = primaryevents.items;
+        events = []; // put the array in the `events` property    
+        for(i = 0;i < items.length; i++)
+        { 
+          var event = new Object();
+          event.title = items[i].summary,
+          event.start =  items[i].start.dateTime,
+          event.end =  items[i].end.dateTime;
+          //dealing recurrent
+          if(items[i].recurrence){
+            event.dow=[];
+            var recu = items[i].recurrence[0];
+            var repeat = recu.split(/[=;]+/)
+            console.log(repeat)
+            if(repeat[1] === 'DAILY'){
+              event.dow = [1,2,3,4,5,6,7];
+            }
+            else if(repeat[1] === 'WEEKLY'){
+              var repdayarr = repeat[3].split(",");
+              for(j = 0;j < repdayarr.length; j++){
+                switch(repdayarr[j]){
+                  case "MO":
+                    event.dow.push(1);break;
+                  case "TU":
+                    event.dow.push(2);break;
+                  case "WE":
+                    event.dow.push(3);break;
+                  case "TH":
+                    event.dow.push(4);break;
+                  case "FR":
+                    event.dow.push(5);break;
+                  case "SA":
+                    event.dow.push(6);break;
+                  case "SU":
+                    event.dow.push(7);break;     
+                }
+              }
+            }
+            console.log(event.dow )
+          }
+          events.push(event);
+        };
+        console.log(events);
+        $('#calendar').fullCalendar('renderEvents' , events,true);
+      }
+    };
+    
+  })();
 
   
 </script>
@@ -177,6 +231,7 @@
   </script>
   <button id="signin-button" onclick="handleSignInClick()">Sign In</button>
   <button id="signout-button" onclick="handleSignOutClick()">Sign Out</button>
+  <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button>
   <pre id="content"></pre>
 
   <div id='calendar'></div>
