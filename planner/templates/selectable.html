@@ -179,26 +179,42 @@
         var title = document.getElementById("eventTitle");
         var save = document.getElementById("Save");
         var cancel = document.getElementById("Cancel");
+        var del = document.getElementById("Delete");
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
+        var newEvent = new Object(); 
+        newEvent.title = title.value;          
+        newEvent.start = start;
+        newEvent.end = end;
+        newEvent.allDay = start._ambigTime;//determine if it's an all day event
+        $('#calendar').fullCalendar('renderEvent', newEvent);
         span.onclick = function() {
+          $('#calendar').fullCalendar('refetchEvents');
           modal.style.display = "none";
         }
         cancel.onclick = function() {
+          $('#calendar').fullCalendar('refetchEvents');
           modal.style.display = "none";
         }
+
+        del.onclick = function() {
+          $('#calendar').fullCalendar('refetchEvents');
+          modal.style.display = "none";
+        }
+
         save.onclick = function() {
           if(title.value){
-            var newEvent = new Object(); 
-            newEvent.title = title.value;
-            newEvent.start = start;
-            newEvent.end = end;
-            $('#calendar').fullCalendar('renderEvent', newEvent, true); // stick? = true
+            newEvent.title = title.value;          
           }
+          else{
+            newEvent.title = "No title";
+          }
+          $('#calendar').fullCalendar('refetchEvents');
           updateEvent(newEvent);
           modal.style.display = "none";
         }
         $('#calendar').fullCalendar('unselect');
+        title.value = "";
       },
       eventClick: function(calEvent, jsEvent, view) {
        
@@ -208,22 +224,33 @@
         var title = document.getElementById("eventTitle");
         var save = document.getElementById("Save");
         var cancel = document.getElementById("Cancel");
+        var del = document.getElementById("Delete");
+       
         title.value = calEvent.title;
-        console.log(calEvent);
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
           modal.style.display = "none";
+          title.value = "";
         }
         cancel.onclick = function() {
           modal.style.display = "none";
+          title.value = "";
+        }
+        del.onclick = function() {
+          deleteEvent(calEvent);
+          modal.style.display = "none";
+          title.value = "";
         }
         save.onclick = function() {
+          var oldEvent = new Object();
+          oldEvent = calEvent;
           calEvent.title = title.value;
+          deleteEvent(oldEvent);       
           updateEvent(calEvent);
           modal.style.display = "none";
+          title.value = "";
         }
-    
         // change the border color just for fun
         $(this).css('border-color', 'red');
     
@@ -249,6 +276,7 @@
         for(i = 0;i < items.length; i++)
         { 
           var event = new Object();
+          event.id = items[i].id,
           event.title = items[i].summary,
           event.start =  items[i].start.dateTime,
           event.end =  items[i].end.dateTime;
@@ -300,68 +328,85 @@
   })();
 
   // saves event to eventArray 
-// used for both intial save and 
-// later edits to the event
-function updateEvent(event) {
-  var desc;
-  var location;
-  var eventToSave = {};
-  if (event.placeID) {
-      location = event.placeID; // formatted address for gCal
-      // placeID is handled on google's end
-  }
-  if (event.description) {
-      desc = event.description;
-  }
-  if (event.allDay) {
-      eventToSave = {
-          'summary': event.title,
-          'location': location,
-          'description': desc,
-          'start': {
-              'date': event.start.format("YYYY-MM-DD")
-          },
-          'end': {
-              'date': event.end.format("YYYY-MM-DD")
-          }
-      };
+  // used for both intial save and 
+  // later edits to the event
+  function updateEvent(event) {
+    var desc;
+    var location;
+    var eventToSave = {};
+    if (event.placeID) {
+        location = event.placeID; // formatted address for gCal
+        // placeID is handled on google's end
+    }
+    if (event.description) {
+        desc = event.description;
+    }
+    if (event.allDay) {
+        eventToSave = {
+            'summary': event.title,
+            'location': location,
+            'description': desc,
+            'start': {
+                'date': event.start.format("YYYY-MM-DD")
+            },
+            'end': {
+                'date': event.end.format("YYYY-MM-DD")
+            }
+        };
 
-  } else {
-      eventToSave = {
-          'summary': event.title,
-          'location': location,
-          'description': desc,
-          'start': {
-              'dateTime': event.start.utc(),
-              'timeZone': "Australia/NSW"
-          },
-          'end': {
-              'dateTime': event.end.utc(),
-              'timeZone': "Australia/NSW"
-
-          }
-      };
+    } else {
+        eventToSave = {
+            'summary': event.title,
+            'location': location,
+            'description': desc,
+            'start': {
+                'dateTime': event.start.utc(),
+            },
+            'end': {
+                'dateTime': event.end.utc(),
+            }
+        };
+    }
+    console.log(eventToSave);
+    console.log(event);
+    var request = gapi.client.calendar.events.insert({
+        'calendarId': 'primary',
+        'resource': eventToSave
+    });
+    console.log(request);
+    request.execute(function(response) {
+        if (!response) {
+            console.log('error inserting event');
+            console.log(response);
+        } else {
+            console.log('event inserted');
+            console.log(response);
+            console.log(response.id);
+            console.log(event.category);
+            event.id = response.id;
+            $('#calendar').fullCalendar('renderEvent', event,true); // stick? = true                         
+        }
+    });
   }
-  console.log(eventToSave);
-  var request = gapi.client.calendar.events.insert({
-      'calendarId': 'primary',
-      'resource': eventToSave
-  });
-  console.log(request);
-  request.execute(function(response) {
-      if (!response) {
-          console.log('error inserting event');
-          console.log(response);
-      } else {
-          console.log('event inserted');
-          console.log(response);
-          console.log(response.id);
-          console.log(event.category);
-      }
-  });
-}
-// adds drag/drop functionality to the external events
-// adds basic attributes to the event objects
+  // deletes event from users gcal
+  // when it is dropped in the trashcan
+  function deleteEvent(event) {
+    var request = gapi.client.calendar.events.delete({
+        'calendarId': 'primary',
+        'eventId': event.id
+    });
+
+    request.execute(function(response) {
+        if (!response) {
+            console.log('event delete threw error');
+            console.log(response);
+        } else {
+            console.log('event deleted');
+            $('#calendar').fullCalendar('removeEvents', event.id);
+        }
+    });
+
+  }
 </script>
 
 <style>
@@ -399,6 +444,7 @@ function updateEvent(event) {
     <input id="eventTitle" type="text" name = "Title" >
     <input type="button" id="Save" value="Save" >
     <input type="button" id="Cancel" value="Cancel" >
+    <input type="button" id="Delete" value="Delete" >
     <a href="edittask">More Options</a>
   </div>
 </div>
