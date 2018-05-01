@@ -2,6 +2,49 @@
 <html>
 <head>
 <meta charset='utf-8' />
+
+<style>
+  /* The Modal (background) */
+  .modal {
+      display: none;
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+  }
+  
+  /* The Close Button */
+  .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+  }
+  </style>
+
+
 {% load static %}
 <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
 <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
@@ -15,106 +58,107 @@
 <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
 <script>
-    // Client ID and API key from the Developer Console
-    var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
-    var API_KEY = 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg';
+  var primaryevents = [];//the events array of primary calendar
 
-    // Array of API discovery doc URLs for APIs used by the quickstart
-    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+  // Client ID and API key from the Developer Console
+  var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
+  var API_KEY = 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg';
 
-    // Authorization scopes required by the API; multiple scopes can be
-    // included, separated by spaces.
-    var SCOPES = "https://www.googleapis.com/auth/calendar";
-    function handleClientLoad() {
-      // Loads the client library and the auth2 library together for efficiency.
-      // Loading the auth2 library is optional here since `gapi.client.init` function will load
-      // it if not already loaded. Loading it upfront can save one network request.
-      gapi.load('client:auth2', start);
+  // Array of API discovery doc URLs for APIs used by the quickstart
+  var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+
+  // Authorization scopes required by the API; multiple scopes can be
+  // included, separated by spaces.
+  var SCOPES = "https://www.googleapis.com/auth/calendar";
+  function handleClientLoad() {
+    // Loads the client library and the auth2 library together for efficiency.
+    // Loading the auth2 library is optional here since `gapi.client.init` function will load
+    // it if not already loaded. Loading it upfront can save one network request.
+    gapi.load('client:auth2', start);
+  }
+  function start() {
+    // 2. Initialize the JavaScript client library.
+    gapi.client.init({
+      'apiKey': API_KEY,
+      // Your API key will be automatically added to the Discovery Document URLs.
+      'discoveryDocs': DISCOVERY_DOCS,
+      // clientId and scope are optional if auth is not required.
+      'clientId': CLIENT_ID,
+      'scope': SCOPES,
+    }).then(function () {
+      // Listen for sign-in state changes.
+      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+      // Handle the initial sign-in state.
+      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    }).then(function() {
+      // 3. Initialize and make the API request.
+      return gapi.client.request({
+        'path' : 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+      })
+    }).then(function(response) {
+      primaryevents = response.result;
+      console.log(response.result);
+    }, function(reason) {
+      console.log('Error: ');
+    });
+  };
+  
+  function updateSigninStatus(isSignedIn) {
+    // When signin status changes, this function is called.
+    // If the signin status is changed to signedIn, we make an API call.
+    if (isSignedIn) {
+      listUpcomingEvents();
     }
-    var primaryevents;
-    function start() {
-      // 2. Initialize the JavaScript client library.
-      gapi.client.init({
-        'apiKey': API_KEY,
-        // Your API key will be automatically added to the Discovery Document URLs.
-        'discoveryDocs': DISCOVERY_DOCS,
-        // clientId and scope are optional if auth is not required.
-        'clientId': CLIENT_ID,
-        'scope': SCOPES,
-      }).then(function () {
-        // Listen for sign-in state changes.
-        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-        // Handle the initial sign-in state.
-        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-      }).then(function() {
-        // 3. Initialize and make the API request.
-        return gapi.client.request({
-          'path' : 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
-        })
-      }).then(function(response) {
-        primaryevents = response.result;
-        console.log(response.result);
-      }, function(reason) {
-        console.log('Error: ');
-      });
-    };
-    
-    function updateSigninStatus(isSignedIn) {
-      // When signin status changes, this function is called.
-      // If the signin status is changed to signedIn, we make an API call.
-      if (isSignedIn) {
-        listUpcomingEvents();
-      }
-    }
+  }
 
-    function handleSignInClick(event) {
-      // Ideally the button should only show up after gapi.client.init finishes, so that this
-      // handler won't be called before OAuth is initialized.
-      gapi.auth2.getAuthInstance().signIn();
-      handleClientLoad()
-    }
+  function handleSignInClick(event) {
+    // Ideally the button should only show up after gapi.client.init finishes, so that this
+    // handler won't be called before OAuth is initialized.
+    gapi.auth2.getAuthInstance().signIn();
+    handleClientLoad()
+  }
 
-    function handleSignOutClick(event) {
-      gapi.auth2.getAuthInstance().signOut();
-      handleClientLoad()
-    }
+  function handleSignOutClick(event) {
+    gapi.auth2.getAuthInstance().signOut();
+    handleClientLoad()
+  }
 
-    /**
-     * Print the summary and start datetime/date of the next ten events in
-     * the authorized user's calendar. If no events are found an
-     * appropriate message is printed.
-     */
-    function listUpcomingEvents() {
-      gapi.client.calendar.events.list({
-        'calendarId': 'primary',
-        'timeMin': (new Date()).toISOString(),
-        'showDeleted': false,
-        'singleEvents': true,
-        'maxResults': 10,
-        'orderBy': 'startTime'
-      }).then(function(response) {
-        var events = response.result.items;
-        appendPre('Upcoming events:');
+  /**
+    * Print the summary and start datetime/date of the next ten events in
+    * the authorized user's calendar. If no events are found an
+    * appropriate message is printed.
+    */
+  function listUpcomingEvents() {
+    gapi.client.calendar.events.list({
+      'calendarId': 'primary',
+      'timeMin': (new Date()).toISOString(),
+      'showDeleted': false,
+      'singleEvents': true,
+      'maxResults': 10,
+      'orderBy': 'startTime'
+    }).then(function(response) {
+      var events = response.result.items;
+      appendPre('Upcoming events:');
 
-        if (events.length > 0) {
-          for (i = 0; i < events.length; i++) {
-            var event = events[i];
-            var when = event.start.dateTime;
-            if (!when) {
-              when = event.start.date;
-            }
-            appendPre(event.summary + ' (' + when + ')')
+      if (events.length > 0) {
+        for (i = 0; i < events.length; i++) {
+          var event = events[i];
+          var when = event.start.dateTime;
+          if (!when) {
+            when = event.start.date;
           }
-        } else {
-          appendPre('No upcoming events found.');
+          appendPre(event.summary + ' (' + when + ')')
         }
-      });
-    }
-    function appendPre(message) {
-      var pre = document.getElementById('content');
-      var textContent = document.createTextNode(message + '\n');
-      pre.appendChild(textContent);
-    }
+      } else {
+        appendPre('No upcoming events found.');
+      }
+    });
+  }
+  function appendPre(message) {
+    var pre = document.getElementById('content');
+    var textContent = document.createTextNode(message + '\n');
+    pre.appendChild(textContent);
+  }
 
   $(document).ready(function() {
 
@@ -129,17 +173,60 @@
       selectable: true,
       selectHelper: true,
       select: function(start, end) {
-        var title = prompt('Event Title:');
-        var eventData;
-        if (title) {
-          eventData = {
-            title: title,
-            start: start,
-            end: end
-          };
-          $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+        var modal = document.getElementById('myModal');
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        var title = document.getElementById("eventTitle");
+        var save = document.getElementById("Save");
+        var cancel = document.getElementById("Cancel");
+        modal.style.display = "block";        
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        cancel.onclick = function() {
+          modal.style.display = "none";
+        }
+        save.onclick = function() {
+          if(title.value){
+            var newEvent = new Object(); 
+            newEvent.title = title.value;
+            newEvent.start = start;
+            newEvent.end = end;
+            $('#calendar').fullCalendar('renderEvent', newEvent, true); // stick? = true
+          }
+          updateEvent(newEvent);
+          modal.style.display = "none";
         }
         $('#calendar').fullCalendar('unselect');
+      },
+      eventClick: function(calEvent, jsEvent, view) {
+       
+        var modal = document.getElementById('myModal');
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        var title = document.getElementById("eventTitle");
+        var save = document.getElementById("Save");
+        var cancel = document.getElementById("Cancel");
+        title.value = calEvent.title;
+        console.log(calEvent);
+        modal.style.display = "block";        
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        cancel.onclick = function() {
+          modal.style.display = "none";
+        }
+        save.onclick = function() {
+          calEvent.title = title.value;
+          updateEvent(calEvent);
+          modal.style.display = "none";
+        }
+    
+        // change the border color just for fun
+        $(this).css('border-color', 'red');
+    
       },
       editable: true,
       eventLimit: true, // allow "more" link when too many events
@@ -165,8 +252,12 @@
           event.title = items[i].summary,
           event.start =  items[i].start.dateTime,
           event.end =  items[i].end.dateTime;
+          if(!event.start){//all day event
+            event.start = items[i].start.date,
+            event.end =  items[i].end.date
+          }
           //dealing recurrent
-          if(items[i].recurrence){
+          {% comment %} if(items[i].recurrence){
             event.dow=[];
             var recu = items[i].recurrence[0];
             var repeat = recu.split(/[=;]+/)
@@ -196,18 +287,83 @@
               }
             }
             console.log(event.dow )
-          }
+          } {% endcomment %}
           events.push(event);
         };
         console.log(events);
         $('#calendar').fullCalendar('renderEvents' , events,true);
+        arr = $('#calendar').fullCalendar('clientEvents');
+        console.log(arr);
       }
     };
     
   })();
 
-  
+  // saves event to eventArray 
+// used for both intial save and 
+// later edits to the event
+function updateEvent(event) {
+  var desc;
+  var location;
+  var eventToSave = {};
+  if (event.placeID) {
+      location = event.placeID; // formatted address for gCal
+      // placeID is handled on google's end
+  }
+  if (event.description) {
+      desc = event.description;
+  }
+  if (event.allDay) {
+      eventToSave = {
+          'summary': event.title,
+          'location': location,
+          'description': desc,
+          'start': {
+              'date': event.start.format("YYYY-MM-DD")
+          },
+          'end': {
+              'date': event.end.format("YYYY-MM-DD")
+          }
+      };
+
+  } else {
+      eventToSave = {
+          'summary': event.title,
+          'location': location,
+          'description': desc,
+          'start': {
+              'dateTime': event.start.utc(),
+              'timeZone': "Australia/NSW"
+          },
+          'end': {
+              'dateTime': event.end.utc(),
+              'timeZone': "Australia/NSW"
+
+          }
+      };
+  }
+  console.log(eventToSave);
+  var request = gapi.client.calendar.events.insert({
+      'calendarId': 'primary',
+      'resource': eventToSave
+  });
+  console.log(request);
+  request.execute(function(response) {
+      if (!response) {
+          console.log('error inserting event');
+          console.log(response);
+      } else {
+          console.log('event inserted');
+          console.log(response);
+          console.log(response.id);
+          console.log(event.category);
+      }
+  });
+}
+// adds drag/drop functionality to the external events
+// adds basic attributes to the event objects
 </script>
+
 <style>
 
   body {
@@ -234,7 +390,20 @@
   <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button>
   <pre id="content"></pre>
 
-  <div id='calendar'></div>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Event is</p>
+    <input id="eventTitle" type="text" name = "Title" >
+    <input type="button" id="Save" value="Save" >
+    <input type="button" id="Cancel" value="Cancel" >
+    <a href="edittask">More Options</a>
+  </div>
+</div>
 
+  <div id='calendar'></div>
+</div>
 </body>
 </html>
