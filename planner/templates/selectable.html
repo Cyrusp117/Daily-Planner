@@ -3,47 +3,6 @@
 <head>
 <meta charset='utf-8' />
 
-<style>
-  /* The Modal (background) */
-  .modal {
-      display: none;
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-  }
-  
-  /* The Close Button */
-  .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-  }
-  </style>
-
 
 {% load static %}
 <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
@@ -51,6 +10,7 @@
 <script src='{% static 'lib/moment.min.js' %}'></script>
 <script src='{% static 'lib/jquery.min.js' %}'></script>
 <script src='{% static 'fullcalendar.js' %}'></script>
+<script src='{% static 'moment-timezone-with-data.js' %}'></script>
 <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -360,10 +320,10 @@
             'location': location,
             'description': desc,
             'start': {
-                'dateTime': event.start.utc(),
+                'dateTime': event.start.local() ,
             },
             'end': {
-                'dateTime': event.end.utc(),
+                'dateTime': event.end.local(),
             }
         };
     }
@@ -408,6 +368,47 @@
 
   }
 </script>
+
+<style>
+  /* The Modal (background) */
+  .modal {
+      display: none;
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+  }
+  
+  /* The Close Button */
+  .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+  }
+  </style>
 
 <style>
 
