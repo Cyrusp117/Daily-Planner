@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'planner'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -105,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Australia/NSW'
+TIME_ZONE = 'Australia/Sydney'
 
 USE_I18N = True
 
@@ -114,7 +118,29 @@ USE_L10N = True
 USE_TZ = True
 
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'planner/media/')
+ 
+MEDIA_URL = '/media/'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'planner/static')
 
 STATIC_URL = '/static/'
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
