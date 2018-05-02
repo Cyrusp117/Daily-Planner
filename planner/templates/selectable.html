@@ -170,7 +170,7 @@
             newEvent.title = "No title";
           }
           $('#calendar').fullCalendar('refetchEvents');
-          updateEvent(newEvent);
+          insertEvent(newEvent);
           modal.style.display = "none";
         }
         $('#calendar').fullCalendar('unselect');
@@ -207,7 +207,7 @@
           oldEvent = calEvent;
           calEvent.title = title.value;
           deleteEvent(oldEvent);       
-          updateEvent(calEvent);
+          insertEvent(calEvent);
           modal.style.display = "none";
           title.value = "";
         }
@@ -215,11 +215,19 @@
         $(this).css('border-color', 'red');
     
       },
+      eventDrop: function(event, delta, revertFunc)  {
+        updateEvent(event);
+      },
+      eventResize: function(event, delta, revertFunc) {
+        updateEvent(event);
+      },
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       googleCalendarApiKey: 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg',
       events: {
-        googleCalendarId: 'en-gb.australian#holiday@group.v.calendar.google.com'
+        googleCalendarId: 'en-gb.australian#holiday@group.v.calendar.google.com',
+        editable: false,
+        color: 'green'
       },
       color: 'black',     // an option!
       textColor: 'yellow' // an option!
@@ -287,9 +295,7 @@
     
   })();
 
-  // saves event to eventArray 
-  // used for both intial save and 
-  // later edits to the event
+  //update an existing event
   function updateEvent(event) {
     var desc;
     var location;
@@ -328,12 +334,67 @@
         };
     }
     console.log(eventToSave);
-    console.log(event);
+    var request = gapi.client.calendar.events.update({
+        'calendarId': 'primary',
+        'eventId':event.id,
+        'resource': eventToSave
+    });
+    request.execute(function(response) {
+        if (!response) {
+            console.log('error updating event');
+            console.log(response);
+        } else {
+            console.log('event updated');
+            console.log(response);
+            $('#calendar').fullCalendar('updateEvent', event); // stick? = true                         
+        }
+    });
+  }
+  // saves event to eventArray 
+  // used for both intial save and 
+  // later edits to the event
+  function insertEvent(event) {
+    var desc;
+    var location;
+    var eventToSave = {};
+    if (event.placeID) {
+        location = event.placeID; // formatted address for gCal
+        // placeID is handled on google's end
+    }
+    if (event.description) {
+        desc = event.description;
+    }
+    if (event.allDay) {
+        eventToSave = {
+            'summary': event.title,
+            'location': location,
+            'description': desc,
+            'start': {
+                'date': event.start.format("YYYY-MM-DD")
+            },
+            'end': {
+                'date': event.end.format("YYYY-MM-DD")
+            }
+        };
+
+    } else {
+        eventToSave = {
+            'summary': event.title,
+            'location': location,
+            'description': desc,
+            'start': {
+                'dateTime': event.start.local() ,
+            },
+            'end': {
+                'dateTime': event.end.local(),
+            }
+        };
+    }
+    console.log(eventToSave);
     var request = gapi.client.calendar.events.insert({
         'calendarId': 'primary',
         'resource': eventToSave
     });
-    console.log(request);
     request.execute(function(response) {
         if (!response) {
             console.log('error inserting event');
@@ -342,7 +403,6 @@
             console.log('event inserted');
             console.log(response);
             console.log(response.id);
-            console.log(event.category);
             event.id = response.id;
             $('#calendar').fullCalendar('renderEvent', event,true); // stick? = true                         
         }
@@ -374,7 +434,7 @@
   .modal {
       display: none;
       position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
+      z-index: 10; /* Sit on top */
       padding-top: 100px; /* Location of the box */
       left: 0;
       top: 0;
