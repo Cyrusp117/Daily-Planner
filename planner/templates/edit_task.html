@@ -4,18 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    {% load static %}
+    <script src='{% static 'connectGoogle.js' %}'></script>
+    
     <title>Editing Task</title>
 </head>
+<script>
+    
+    function handleClientLoad() {
+        // Loads the client library and the auth2 library together for efficiency.
+        // Loading the auth2 library is optional here since `gapi.client.init` function will load
+        // it if not already loaded. Loading it upfront can save one network request.
+        gapi.load('client:auth2', Initialize);
+    }
+    function Initialize() {
+        // 2. Initialize the JavaScript client library.
+        gapi.client.init({
+          'apiKey': API_KEY,
+          // Your API key will be automatically added to the Discovery Document URLs.
+          'discoveryDocs': DISCOVERY_DOCS,
+          // clientId and scope are optional if auth is not required.
+          'clientId': CLIENT_ID,
+          'scope': SCOPES,
+        }).then(function () {
+            console.log(sessionStorage.getItem("eventexist"));
+            if(sessionStorage.getItem("eventexist")){//if event already exist, autofill the taskform
+                autofillform();
+            }
+        });
+    };
+    function autofillform(){
+        var taskfrm = document.forms["taskform"];  
+        var eventId = sessionStorage.getItem("GeventId");
+        getGevent(eventId,function(Gevent){
+            console.log('huzzah, I\'m done!');
+            taskfrm.taskTitle.value = Gevent.summary;
+            if(Gevent.start.date){//if it's all day event
+                taskfrm.all_day.checked = true;
+                isallday();
+                taskfrm.f_date.value = Gevent.start.date;
+                taskfrm.t_date.value = Gevent.end.date;
+                taskfrm.destination.value = Gevent.location;
+            }
+            else{
+                taskfrm.all_day.checked = false;
+                var startTime = Gevent.start.dateTime;
+                var endTime = Gevent.end.dateTime;
+                isallday();
+                taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
+                taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T"),startTime.indexOf("+")) ;
+                taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
+                taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T"),endTime.indexOf("+")) ;
+            }
+        });
+    }
+    function isallday(){
+        var taskfrm = document.forms["taskform"];  
+        if(taskfrm.all_day.checked){
+            taskfrm.t_time.style.display = "none";    
+            taskfrm.f_time.style.display = "none";     
+        }
+        else{
+            taskfrm.t_time.style.display = "inline";    
+            taskfrm.f_time.style.display = "inline";   
+        }
+    }
+    function getGevent(eventId,_callback){
+        var request = gapi.client.calendar.events.get({
+            'calendarId': 'primary',
+            'eventId':eventId,
+        });
+        request.execute(function(response) {
+            if (!response) {
+                console.log('error getting event');
+                console.log(response);
+            } else {
+                console.log('event got');
+                console.log(response);
+                _callback(response);
+            }
+        });
+        
+    }
+
+</script>
 <body>
+    <script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script>
     <p>{{taskTitle}} </p>
-    <form method="POST">
+    <form id="taskform" method="POST">
         {% csrf_token %}
         <input type="text" name="taskTitle" placeholder="Enter title of task">
         <input type="submit" name="saveBtn" value="Save">
         <button type="submit" name="delBtn">Delete</button>
+        
         <br>
-        From: <input type="date" name="f_date" value={{f_date}}>
-        <input list="f_time" name="f_time" value={{f_time}} /></label>
+        From: <input type="date" name="f_date" >
+        <input list="f_time" name="f_time" ></label>
         <datalist id="f_time">
             <option value="1:00">
             <option value="2:00">
@@ -36,7 +127,14 @@
             <option value="5:00">
             <option value="6:00">
         </datalist>
-
+        <input type="checkbox" name="all_day" >
+        <label for="EventType">EventType</label>
+        <select name="type" id="type">
+            <option value="others">others</option>
+            <option value="mealtime">mealtime</option>
+            <option value="movie">movie</option>
+        </select>
+        <input type="text" name="destination" placeholder="Enter destination of task">
         <button type="submit" name="cancelBtn">Cancel</button>
     </form>
 </body>

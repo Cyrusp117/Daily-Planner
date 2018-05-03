@@ -74,7 +74,6 @@ var primaryevents = [];//the events array of primary calendar
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       },
-      defaultDate: '2018-03-12', // TODO change it to current day
       navLinks: true, // can click day/week names to navigate views
       selectable: true,
       selectHelper: true,
@@ -88,6 +87,7 @@ var primaryevents = [];//the events array of primary calendar
         var del = document.getElementById("Delete");
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
+        sessionStorage.setItem("eventexist",false);
         var newEvent = new Object(); 
         newEvent.title = title.value;          
         newEvent.start = start;
@@ -131,7 +131,8 @@ var primaryevents = [];//the events array of primary calendar
         var save = document.getElementById("Save");
         var cancel = document.getElementById("Cancel");
         var del = document.getElementById("Delete");
-       
+        sessionStorage.setItem("eventexist",true);
+        sessionStorage.setItem("GeventId",calEvent.id);//store eventID into session.
         title.value = calEvent.title;
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
