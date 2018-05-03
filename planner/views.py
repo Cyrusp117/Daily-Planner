@@ -4,8 +4,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
-from google.oauth2 import id_token
-from google.auth.transport import requests
 
 def edittask(request):
     now = datetime.now()
