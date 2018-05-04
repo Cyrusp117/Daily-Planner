@@ -10,7 +10,13 @@
     <script src="https://apis.google.com/js/api.js"></script>
     {% load static %}
     <script src='{% static 'connectGoogle.js' %}'></script>
-    
+    <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
+    <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+    <script src='{% static 'lib/moment.min.js' %}'></script>
+    <script src='{% static 'lib/jquery.min.js' %}'></script>
+    <script src='{% static 'fullcalendar.js' %}'></script>
+    <script src='{% static 'moment-timezone-with-data.js' %}'></script>
+    <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
     <title>Editing Task</title>
 </head>
 <script>
@@ -31,7 +37,6 @@
           'clientId': CLIENT_ID,
           'scope': SCOPES,
         }).then(function () {
-            console.log(sessionStorage.getItem("eventexist"));
             if(sessionStorage.getItem("eventexist")){//if event already exist, autofill the taskform
                 autofillform();
             }
@@ -55,10 +60,17 @@
                 var startTime = Gevent.start.dateTime;
                 var endTime = Gevent.end.dateTime;
                 isallday();
+                taskfrm.timezone = startTime.slice(startTime.indexOf("+"));
                 taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
                 taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T"),startTime.indexOf("+")) ;
                 taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
                 taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T"),endTime.indexOf("+")) ;
+            }
+            if(Gevent.location){
+                taskfrm.destination.value = Gevent.location;
+            }
+            if(Gevent.description){
+                taskfrm.description.value = Gevent.description;
             }
         });
     }
@@ -90,6 +102,74 @@
         });
         
     }
+    function saveTask(){
+        var taskfrm = document.forms["taskform"];  
+        if(sessionStorage.getItem("eventexist")){
+            updateTask(taskfrm);
+        }
+        else{
+            insertTask(taskfrm);
+        }
+        window.location.replace("schedule");
+    }
+    function updateTask(taskfrm){
+        var desc;
+        var location;
+        var eventToSave = {};
+        var localevent = new Object();
+        localevent.destination = taskfrm.destination.value; // formatted address for gCal
+        localevent.description = taskfrm.description.value;
+        localevent.title = taskfrm.taskTitle.value;
+        localevent.id = sessionStorage.getItem("GeventId");//get original event id
+        if (taskfrm.all_day.checked) {
+            eventToSave = {
+                'summary': localevent.title,
+                'location': localevent.destination,
+                'description': localevent.description,
+                'start': {
+                    'date': taskfrm.f_date.value
+                },
+                'end': {
+                    'date': taskfrm.t_date.value
+                }
+            };
+            localevent.start = taskfrm.f_date.value;
+            localevent.end = taskfrm.t_date.value;
+        } else {
+            var f_dateTime = taskfrm.f_date.value + "T" + taskfrm.f_time.value + taskfrm.timezone;
+            var t_dateTime = taskfrm.t_date.value + "T" + taskfrm.t_time.value + taskfrm.timezone;
+            eventToSave = {
+                'summary': localevent.title,
+                'location': localevent.destination,
+                'description': localevent.description,
+                'start': {
+                    'dateTime': f_dateTime
+                },
+                'end': {
+                    'dateTime': t_dateTime
+                }
+            };
+            localevent.start = f_dateTime;
+            localevent.end = t_dateTime;
+        }
+        console.log(eventToSave);
+        console.log(localevent);
+        var request = gapi.client.calendar.events.update({
+            'calendarId': 'primary',
+            'eventId': localevent.id,
+            'resource': eventToSave
+        });
+        request.execute(function(response) {
+            if (!response) {
+                console.log('error updating event');
+                console.log(response);
+            } else {
+                console.log('event updated');
+                console.log(response);
+                $('#calendar').fullCalendar('updateEvent', localevent); // stick? = true                         
+            }
+        });
+    }
 
 </script>
 <body>
@@ -101,9 +181,8 @@
     <form id="taskform" method="POST">
         {% csrf_token %}
         <input type="text" name="taskTitle" placeholder="Enter title of task">
-        <input type="submit" name="saveBtn" value="Save">
-        <button type="submit" name="delBtn">Delete</button>
-        
+        <input type="button" name="saveBtn" value="Save" onclick="saveTask()">
+        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
         <br>
         From: <input type="date" name="f_date" >
         <input list="f_time" name="f_time" ></label>
@@ -127,7 +206,9 @@
             <option value="5:00">
             <option value="6:00">
         </datalist>
-        <input type="checkbox" name="all_day" >
+        <br>
+        <label for="Allday">all day</label>
+        <input type="checkbox" name="all_day" onclick="isallday()">
         <label for="EventType">EventType</label>
         <select name="type" id="type">
             <option value="others">others</option>
@@ -135,7 +216,8 @@
             <option value="movie">movie</option>
         </select>
         <input type="text" name="destination" placeholder="Enter destination of task">
-        <button type="submit" name="cancelBtn">Cancel</button>
+        <input type="textfield" name="description" placeholder="Enter description of task">
+        <button type="button" name="cancelBtn">Cancel</button>
     </form>
 </body>
 </html>
