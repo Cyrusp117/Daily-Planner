@@ -2,14 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-    <script src="https://apis.google.com/js/api.js"></script>
     {% load static %}
-    <script src='{% static 'connectGoogle.js' %}'></script>
     <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
     <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
     <script src='{% static 'lib/moment.min.js' %}'></script>
@@ -17,7 +10,12 @@
     <script src='{% static 'fullcalendar.js' %}'></script>
     <script src='{% static 'moment-timezone-with-data.js' %}'></script>
     <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
-    <title>Editing Task</title>
+    
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src='{% static 'connectGoogle.js' %}'></script>
 </head>
 <script>
     
@@ -37,44 +35,58 @@
           'clientId': CLIENT_ID,
           'scope': SCOPES,
         }).then(function () {
-            if(sessionStorage.getItem("eventexist")){//if event already exist, autofill the taskform
-                autofillform();
-            }
+            autofillform();
         });
     };
-    function autofillform(){
-        var taskfrm = document.forms["taskform"];  
-        var eventId = sessionStorage.getItem("GeventId");
-        getGevent(eventId,function(Gevent){
-            console.log('huzzah, I\'m done!');
-            taskfrm.taskTitle.value = Gevent.summary;
-            if(Gevent.start.date){//if it's all day event
+    function autofillform(){//auto fill the taskform
+        var taskfrm = document.forms["taskform"]; 
+        var isExist = sessionStorage.getItem("eventexist"); 
+        if(isExist === false){//if event already exist, autofill the taskform
+            console.log(isExist);
+            var eventId = sessionStorage.getItem("GeventId");
+            getGevent(eventId,function(Gevent){
+                console.log('huzzah, I\'m done!');
+                taskfrm.taskTitle.value = Gevent.summary;
+                if(Gevent.start.date){//if it's all day event
+                    taskfrm.all_day.checked = true;
+                    alldaydisplay();
+                    taskfrm.f_date.value = Gevent.start.date;
+                    taskfrm.t_date.value = Gevent.end.date;
+                }
+                else{
+                    taskfrm.all_day.checked = false;
+                    var startTime = Gevent.start.dateTime;
+                    var endTime = Gevent.end.dateTime;
+                    alldaydisplay();
+                    sliceTime(taskfrm, startTime, endTime);
+                }
+                if(Gevent.location){
+                    taskfrm.destination.value = Gevent.location;
+                }
+                if(Gevent.description){
+                    taskfrm.description.value = Gevent.description;
+                }
+            });
+        }
+        else{//when inserting new event to calendar
+            var locEvent = sessionStorage.getItem("localEvent");
+            if(locEvent.allDay){
+                //if it's all  day event
                 taskfrm.all_day.checked = true;
-                isallday();
-                taskfrm.f_date.value = Gevent.start.date;
-                taskfrm.t_date.value = Gevent.end.date;
-                taskfrm.destination.value = Gevent.location;
+                alldaydisplay();
+                taskfrm.f_date.value = locEvent.start.format("YYYY-MM-DD");
+                taskfrm.t_date.value = locEvent.end.format("YYYY-MM-DD");
             }
             else{
                 taskfrm.all_day.checked = false;
-                var startTime = Gevent.start.dateTime;
-                var endTime = Gevent.end.dateTime;
-                isallday();
-                taskfrm.timezone = startTime.slice(startTime.indexOf("+"));
-                taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
-                taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T"),startTime.indexOf("+")) ;
-                taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
-                taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T"),endTime.indexOf("+")) ;
+                var startTime = locEvent.start.local();
+                var endTime = locEvent.end.local();
+                alldaydisplay();
+                sliceTime(taskfrm, startTime, endTime);
             }
-            if(Gevent.location){
-                taskfrm.destination.value = Gevent.location;
-            }
-            if(Gevent.description){
-                taskfrm.description.value = Gevent.description;
-            }
-        });
+        }
     }
-    function isallday(){
+    function alldaydisplay(){
         var taskfrm = document.forms["taskform"];  
         if(taskfrm.all_day.checked){
             taskfrm.t_time.style.display = "none";    
@@ -84,6 +96,12 @@
             taskfrm.t_time.style.display = "inline";    
             taskfrm.f_time.style.display = "inline";   
         }
+    }
+    function checkallday(){
+        var taskfrm = document.forms["taskform"];  
+        alldaydisplay();
+        taskfrm.f_time.value = moment().format("hh:mm:ss");
+        taskfrm.t_time.value = moment().add(1,'hour').format("hh:mm:ss");
     }
     function getGevent(eventId,_callback){
         var request = gapi.client.calendar.events.get({
@@ -102,15 +120,124 @@
         });
         
     }
+    function sliceTime(taskfrm, startTime, endTime){
+        taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
+        taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T"),startTime.indexOf("+")) ;
+        taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
+        taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T"),endTime.indexOf("+")) ;
+    }
+    function formatTime(taskfrm){//check if the date and time in taskform is in correct format and make it a moment object
+        if(!taskfrm.all_day.checked){//if it's all day event, don't need to check
+            var f_datetime = moment.tz(taskfrm.f_date.value +" "+ taskfrm.f_time.value,moment.tz.guess());
+            var t_datetime = moment.tz(taskfrm.t_date.value +" "+ taskfrm.t_time.value, moment.tz.guess());
+            if(!t_datetime._isValid || !f_datetime._isValid){
+                alert("Invalid time format, correct format is hours:minutes");
+            }
+            if(!f_datetime._isValid){
+                f_datetime = moment();
+            }
+            if(!t_datetime._isValid){
+                t_datetime = moment().add(1,'hour');
+            }
+            taskfrm.f_datetime = f_datetime.format();
+            taskfrm.t_datetime = t_datetime.format();
+            sliceTime(taskfrm, taskfrm.f_datetime, taskfrm.t_datetime);
+        }
+    }
     function saveTask(){
         var taskfrm = document.forms["taskform"];  
+        formatTime(taskfrm);
         if(sessionStorage.getItem("eventexist")){
             updateTask(taskfrm);
         }
         else{
             insertTask(taskfrm);
         }
-        window.location.replace("schedule");
+        backToSchedule();
+    }
+    function deleteTask(taskfrm){
+        if(sessionStorage.getItem('eventexist')){//if the event do exist
+            var eventId = sessionStorage.getItem('GeventId');
+            var request = gapi.client.calendar.events.delete({
+                'calendarId': 'primary',
+                'eventId': eventId
+            });
+            request.execute(function(response) {
+                if (!response) {
+                    console.log('event delete threw error');
+                    console.log(response);
+                } else {
+                    console.log('event deleted');
+                    $('#calendar').fullCalendar('removeEvents', eventId);
+                }
+            });
+        }
+        else{//else only delete the local event.
+            $('#calendar').fullCalendar('removeEvents', eventId);
+        }
+        backToSchedule();
+    }
+    function backToSchedule(){
+        sessionStorage.removeItem('GeventId');
+        sessionStorage.removeItem('localEvent');
+        sessionStorage.removeItem('eventexist');
+        <!-- window.location.replace("schedule"); -->
+    }
+    function insertTask(taskfrm){
+        var desc;
+        var location;
+        var eventToSave = {};
+        var localevent = new Object();
+        localevent.destination = taskfrm.destination.value; // formatted address for gCal
+        localevent.description = taskfrm.description.value;
+        localevent.title = taskfrm.taskTitle.value;
+        if (taskfrm.all_day.checked) {
+            eventToSave = {
+                'summary': localevent.title,
+                'location': localevent.destination,
+                'description': localevent.description,
+                'start': {
+                    'date': taskfrm.f_date.value
+                },
+                'end': {
+                    'date': taskfrm.t_date.value
+                }
+            };
+            localevent.start = taskfrm.f_date.value;
+            localevent.end = taskfrm.t_date.value;
+        } else {
+            var f_dateTime = taskfrm.f_datetime;
+            var t_dateTime = taskfrm.t_datetime;
+            eventToSave = {
+                'summary': localevent.title,
+                'location': localevent.destination,
+                'description': localevent.description,
+                'start': {
+                    'dateTime': f_dateTime
+                },
+                'end': {
+                    'dateTime': t_dateTime
+                }
+            };
+            localevent.start = f_dateTime;
+            localevent.end = t_dateTime;
+        }
+        console.log(eventToSave);
+        console.log(localevent);
+        var request = gapi.client.calendar.events.insert({
+            'calendarId': 'primary',
+            'resource': eventToSave
+        });
+        request.execute(function(response) {
+            if (!response) {
+                console.log('error adding event');
+                console.log(response);
+            } else {
+                console.log('event added');
+                console.log(response);
+                $('#calendar').fullCalendar('addEvent', localevent); // stick? = true                         
+            }
+        });
     }
     function updateTask(taskfrm){
         var desc;
@@ -136,8 +263,8 @@
             localevent.start = taskfrm.f_date.value;
             localevent.end = taskfrm.t_date.value;
         } else {
-            var f_dateTime = taskfrm.f_date.value + "T" + taskfrm.f_time.value + taskfrm.timezone;
-            var t_dateTime = taskfrm.t_date.value + "T" + taskfrm.t_time.value + taskfrm.timezone;
+            var f_dateTime = taskfrm.f_datetime;
+            var t_dateTime = taskfrm.t_datetime;
             eventToSave = {
                 'summary': localevent.title,
                 'location': localevent.destination,
@@ -185,30 +312,14 @@
         <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
         <br>
         From: <input type="date" name="f_date" >
-        <input list="f_time" name="f_time" ></label>
-        <datalist id="f_time">
-            <option value="1:00">
-            <option value="2:00">
-            <option value="3:00">
-            <option value="4:00">
-            <option value="5:00">
-            <option value="6:00">
-        </datalist>
+        <input type="time" name="f_time" ></label>
         <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
         <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
         To: <input type="date" name="t_date">
-        <input list="t_time" name="t_time">
-        <datalist id="t_time">
-            <option value="1:00">
-            <option value="2:00">
-            <option value="3:00">
-            <option value="4:00">
-            <option value="5:00">
-            <option value="6:00">
-        </datalist>
+        <input type="time"  name="t_time">
         <br>
         <label for="Allday">all day</label>
-        <input type="checkbox" name="all_day" onclick="isallday()">
+        <input type="checkbox" name="all_day" onclick="checkallday()">
         <label for="EventType">EventType</label>
         <select name="type" id="type">
             <option value="others">others</option>
@@ -217,7 +328,7 @@
         </select>
         <input type="text" name="destination" placeholder="Enter destination of task">
         <input type="textfield" name="description" placeholder="Enter description of task">
-        <button type="button" name="cancelBtn">Cancel</button>
+        <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
     </form>
 </body>
 </html>

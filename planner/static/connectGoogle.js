@@ -87,24 +87,27 @@ var primaryevents = [];//the events array of primary calendar
         var del = document.getElementById("Delete");
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
-        sessionStorage.setItem("eventexist",false);
         var newEvent = new Object(); 
         newEvent.title = title.value;          
         newEvent.start = start;
         newEvent.end = end;
         newEvent.allDay = start._ambigTime;//determine if it's an all day event
-        $('#calendar').fullCalendar('renderEvent', newEvent);
+        newEvent.id = temp_1;
+        $('#calendar').fullCalendar('renderEvent', newEvent, true);
+        sessionStorage.removeItem("eventexist");
+        sessionStorage.setItem("localEvent", newEvent);//store local event
+        console.log(sessionStorage.getItem("localEvent"));
         span.onclick = function() {
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           modal.style.display = "none";
         }
         cancel.onclick = function() {
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           modal.style.display = "none";
         }
 
         del.onclick = function() {
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           modal.style.display = "none";
         }
 
@@ -115,7 +118,7 @@ var primaryevents = [];//the events array of primary calendar
           else{
             newEvent.title = "No title";
           }
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           insertEvent(newEvent);
           modal.style.display = "none";
         }
@@ -133,7 +136,9 @@ var primaryevents = [];//the events array of primary calendar
         var del = document.getElementById("Delete");
         sessionStorage.setItem("eventexist",true);
         sessionStorage.setItem("GeventId",calEvent.id);//store eventID into session.
+        sessionStorage.setItem("localEvent", calEvent);//store local event
         title.value = calEvent.title;
+        console.log(calEvent);
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
@@ -148,6 +153,9 @@ var primaryevents = [];//the events array of primary calendar
           deleteEvent(calEvent);
           modal.style.display = "none";
           title.value = "";
+          sessionStorage.removeItem("eventexist");
+          sessionStorage.removeItem('GeventId');
+          sessionStorage.removeItem('localEvent');
         }
         save.onclick = function() {
           var oldEvent = new Object();
@@ -207,9 +215,10 @@ var primaryevents = [];//the events array of primary calendar
       }
     };
   })();
-
   //update an existing event
   function updateEvent(event) {
+    console.log("this is after session")
+    
     var desc;
     var location;
     var eventToSave = {};
@@ -246,6 +255,7 @@ var primaryevents = [];//the events array of primary calendar
             }
         };
     }
+    console.log("this is after session")
     console.log(eventToSave);
     var request = gapi.client.calendar.events.update({
         'calendarId': 'primary',
