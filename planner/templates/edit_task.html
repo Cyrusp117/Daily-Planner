@@ -41,7 +41,7 @@
     function autofillform(){//auto fill the taskform
         var taskfrm = document.forms["taskform"]; 
         var isExist = sessionStorage.getItem("eventexist"); 
-        if(isExist === false){//if event already exist, autofill the taskform
+        if(isExist === 'true'){//if event already exist, autofill the taskform
             console.log(isExist);
             var eventId = sessionStorage.getItem("GeventId");
             getGevent(eventId,function(Gevent){
@@ -65,6 +65,9 @@
                 }
                 if(Gevent.description){
                     taskfrm.description.value = Gevent.description;
+                }
+                if(Gevent.extendedProperties){
+                    taskfrm.type.value = Gevent.extendedProperties.private.type;
                 }
             });
         }
@@ -253,6 +256,7 @@
         localevent.description = taskfrm.description.value;
         localevent.title = taskfrm.taskTitle.value;
         localevent.id = sessionStorage.getItem("GeventId");//get original event id
+        localevent.type = taskfrm.type.value;
         if (taskfrm.all_day.checked) {
             eventToSave = {
                 'summary': localevent.title,
@@ -263,7 +267,13 @@
                 },
                 'end': {
                     'date': taskfrm.t_date.value
+                },
+                "extendedProperties": {
+                    "private": {
+                      "type": localevent.type
+                    }
                 }
+                
             };
             localevent.start = taskfrm.f_date.value;
             localevent.end = taskfrm.t_date.value;
@@ -279,7 +289,13 @@
                 },
                 'end': {
                     'dateTime': t_dateTime
+                },
+                "extendedProperties": {
+                    "private": {
+                      "type": localevent.type
+                    }
                 }
+                
             };
             localevent.start = f_dateTime;
             localevent.end = t_dateTime;
