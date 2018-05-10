@@ -149,6 +149,9 @@
     function saveTask(){
         var taskfrm = document.forms["taskform"];  
         formatTime(taskfrm);
+        if(!taskfrm.taskTitle.value){
+            taskfrm.taskTitle.value = "No title";
+        }
         if(sessionStorage.getItem("eventexist")){
             updateTask(taskfrm);
         }
@@ -183,7 +186,7 @@
         sessionStorage.removeItem('GeventId');
         sessionStorage.removeItem('localEvent');
         sessionStorage.removeItem('eventexist');
-        <!-- window.location.replace("schedule"); -->
+        window.location.replace("schedule");
     }
     function insertTask(taskfrm){
         var desc;
