@@ -69,20 +69,22 @@
             });
         }
         else{//when inserting new event to calendar
-            var locEvent = sessionStorage.getItem("localEvent");
-            if(locEvent.allDay){
+            if(sessionStorage.getItem("eventAllDay") === 'true'){
                 //if it's all  day event
                 taskfrm.all_day.checked = true;
                 alldaydisplay();
-                taskfrm.f_date.value = locEvent.start.format("YYYY-MM-DD");
-                taskfrm.t_date.value = locEvent.end.format("YYYY-MM-DD");
+                taskfrm.f_date.value = sessionStorage.getItem("eventStart");
+                taskfrm.t_date.value = sessionStorage.getItem("eventEnd");
             }
             else{
                 taskfrm.all_day.checked = false;
-                var startTime = locEvent.start.local();
-                var endTime = locEvent.end.local();
                 alldaydisplay();
-                sliceTime(taskfrm, startTime, endTime);
+                var startTime = sessionStorage.getItem("eventStart");
+                var endTime = sessionStorage.getItem("eventEnd");
+                taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
+                taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T")) ;
+                taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
+                taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T")) ;
             }
         }
     }

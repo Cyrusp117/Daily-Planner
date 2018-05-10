@@ -92,21 +92,23 @@ var primaryevents = [];//the events array of primary calendar
         newEvent.start = start;
         newEvent.end = end;
         newEvent.allDay = start._ambigTime;//determine if it's an all day event
-        $('#calendar').fullCalendar('renderEvent', newEvent, true);
+        $('#calendar').fullCalendar('renderEvent', newEvent);
         sessionStorage.removeItem("eventexist");
-        sessionStorage.setItem("localEvent", newEvent);//store local event
-        console.log(sessionStorage.getItem("localEvent"));
+        sessionStorage.setItem("eventTitle",title.value);
+        sessionStorage.setItem("eventStart",start.toISOString());
+        sessionStorage.setItem("eventEnd",end.toISOString());
+        sessionStorage.setItem("eventAllDay",newEvent.allDay);
         span.onclick = function() {
-          $('#calendar').fullCalendar('removeEvents', newEvent.id);
+          $('#calendar').fullCalendar('refetchEvents');
           modal.style.display = "none";
         }
         cancel.onclick = function() {
-          $('#calendar').fullCalendar('removeEvents', newEvent.id);
+          $('#calendar').fullCalendar('refetchEvents');
           modal.style.display = "none";
         }
 
         del.onclick = function() {
-          $('#calendar').fullCalendar('removeEvents', newEvent.id);
+          $('#calendar').fullCalendar('refetchEvents');
           modal.style.display = "none";
         }
 
@@ -117,7 +119,7 @@ var primaryevents = [];//the events array of primary calendar
           else{
             newEvent.title = "No title";
           }
-          $('#calendar').fullCalendar('removeEvents', newEvent.id);
+          $('#calendar').fullCalendar('refetchEvents');
           insertEvent(newEvent);
           modal.style.display = "none";
         }
