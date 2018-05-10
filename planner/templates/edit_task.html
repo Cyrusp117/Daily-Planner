@@ -15,6 +15,7 @@
     <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
     <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places&callback=initAutocomplete" async defer></script>
     <script src='{% static 'connectGoogle.js' %}'></script>
 </head>
 <script>
@@ -319,6 +320,8 @@
         });
     }
 
+
+
 </script>
 <body>
     <script async defer src="https://apis.google.com/js/api.js"
@@ -351,5 +354,29 @@
         <input type="textfield" name="description" placeholder="Enter description of task">
         <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
     </form>
+
 </body>
+<script >
+    function initAutocomplete(){
+        var placeInput = document.getElementsByName("destination");
+        console.log(placeInput[0]);
+        var autocomplete = new google.maps.places.Autocomplete(placeInput[0]);
+
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+            console.log(address);
+        });
+    }
+</script>
+
 </html>

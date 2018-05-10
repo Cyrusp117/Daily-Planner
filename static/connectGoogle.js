@@ -129,24 +129,39 @@ $(document).ready(function () {
     eventClick: function (calEvent, jsEvent, view) {
 
       var modal = document.getElementById('myModal');
+      var mapModel = document.getElementById('mapModel');
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
+      var span2 = document.getElementsByClassName("close")[1];
       var title = document.getElementById("eventTitle");
       var save = document.getElementById("Save");
       var cancel = document.getElementById("Cancel");
       var del = document.getElementById("Delete");
-      sessionStorage.setItem("eventexist", 'true');
-      sessionStorage.setItem("GeventId", calEvent.id);//store eventID into session.
+      var map = document.getElementById("Map");
+      sessionStorage.setItem("eventexist",true);
+      sessionStorage.setItem("GeventId",calEvent.id);//store eventID into session.
       sessionStorage.setItem("localEvent", calEvent);//store local event
       title.value = calEvent.title;
       console.log(calEvent);
-      modal.style.display = "block";
+      modal.style.display = "block";        
       // When the user clicks on <span> (x), close the modal
-      span.onclick = function () {
+      map.onclick = function() {
+        modal.style.display = "none";
+        title.value = "";
+        mapModel.style.display = "block";
+        var mapframe = document.getElementById("destinationMap");
+        var placeCode = calEvent.location.replace(/ /g, "+");
+        var placeCode = placeCode.replace(/,/g, "");
+        mapframe.src = "https://www.google.com/maps/embed/v1/place?q=" + placeCode +"&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg";
+      }
+      span2.onclick = function() {
+        mapModel.style.display = "none";
+      }
+      span.onclick = function() {
         modal.style.display = "none";
         title.value = "";
       }
-      cancel.onclick = function () {
+      cancel.onclick = function() {
         modal.style.display = "none";
         title.value = "";
       }

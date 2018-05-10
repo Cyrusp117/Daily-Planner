@@ -127,12 +127,15 @@ var primaryevents = [];//the events array of primary calendar
       eventClick: function(calEvent, jsEvent, view) {
        
         var modal = document.getElementById('myModal');
+        var mapModel = document.getElementById('mapModel');
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
+        var span2 = document.getElementsByClassName("close")[1];
         var title = document.getElementById("eventTitle");
         var save = document.getElementById("Save");
         var cancel = document.getElementById("Cancel");
         var del = document.getElementById("Delete");
+        var map = document.getElementById("Map");
         sessionStorage.setItem("eventexist",true);
         sessionStorage.setItem("GeventId",calEvent.id);//store eventID into session.
         sessionStorage.setItem("localEvent", calEvent);//store local event
@@ -140,6 +143,14 @@ var primaryevents = [];//the events array of primary calendar
         console.log(calEvent);
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
+        map.onclick = function() {
+          modal.style.display = "none";
+          title.value = "";
+          mapModel.style.display = "block";
+        }
+        span2.onclick = function() {
+          mapModel.style.display = "none";
+        }
         span.onclick = function() {
           modal.style.display = "none";
           title.value = "";
