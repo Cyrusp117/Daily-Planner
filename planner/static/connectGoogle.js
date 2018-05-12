@@ -74,7 +74,6 @@ var primaryevents = [];//the events array of primary calendar
         center: 'title',
         right: 'month,agendaWeek,agendaDay'
       },
-      defaultDate: '2018-03-12', // TODO change it to current day
       navLinks: true, // can click day/week names to navigate views
       selectable: true,
       selectHelper: true,
@@ -93,18 +92,21 @@ var primaryevents = [];//the events array of primary calendar
         newEvent.start = start;
         newEvent.end = end;
         newEvent.allDay = start._ambigTime;//determine if it's an all day event
-        $('#calendar').fullCalendar('renderEvent', newEvent);
+        $('#calendar').fullCalendar('renderEvent', newEvent, true);
+        sessionStorage.removeItem("eventexist");
+        sessionStorage.setItem("localEvent", newEvent);//store local event
+        console.log(sessionStorage.getItem("localEvent"));
         span.onclick = function() {
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           modal.style.display = "none";
         }
         cancel.onclick = function() {
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           modal.style.display = "none";
         }
 
         del.onclick = function() {
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           modal.style.display = "none";
         }
 
@@ -115,7 +117,7 @@ var primaryevents = [];//the events array of primary calendar
           else{
             newEvent.title = "No title";
           }
-          $('#calendar').fullCalendar('refetchEvents');
+          $('#calendar').fullCalendar('removeEvents', newEvent.id);
           insertEvent(newEvent);
           modal.style.display = "none";
         }
@@ -125,16 +127,30 @@ var primaryevents = [];//the events array of primary calendar
       eventClick: function(calEvent, jsEvent, view) {
        
         var modal = document.getElementById('myModal');
+        var mapModel = document.getElementById('mapModel');
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
+        var span2 = document.getElementsByClassName("close")[1];
         var title = document.getElementById("eventTitle");
         var save = document.getElementById("Save");
         var cancel = document.getElementById("Cancel");
         var del = document.getElementById("Delete");
-       
+        var map = document.getElementById("Map");
+        sessionStorage.setItem("eventexist",true);
+        sessionStorage.setItem("GeventId",calEvent.id);//store eventID into session.
+        sessionStorage.setItem("localEvent", calEvent);//store local event
         title.value = calEvent.title;
+        console.log(calEvent);
         modal.style.display = "block";        
         // When the user clicks on <span> (x), close the modal
+        map.onclick = function() {
+          modal.style.display = "none";
+          title.value = "";
+          mapModel.style.display = "block";
+        }
+        span2.onclick = function() {
+          mapModel.style.display = "none";
+        }
         span.onclick = function() {
           modal.style.display = "none";
           title.value = "";
@@ -147,6 +163,9 @@ var primaryevents = [];//the events array of primary calendar
           deleteEvent(calEvent);
           modal.style.display = "none";
           title.value = "";
+          sessionStorage.removeItem("eventexist");
+          sessionStorage.removeItem('GeventId');
+          sessionStorage.removeItem('localEvent');
         }
         save.onclick = function() {
           var oldEvent = new Object();
@@ -206,7 +225,6 @@ var primaryevents = [];//the events array of primary calendar
       }
     };
   })();
-
   //update an existing event
   function updateEvent(event) {
     var desc;

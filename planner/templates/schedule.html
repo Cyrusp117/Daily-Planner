@@ -95,10 +95,19 @@
     <input type="button" id="Save" value="Save" >
     <input type="button" id="Cancel" value="Cancel" >
     <input type="button" id="Delete" value="Delete" >
+    <input type="button" id="Map" value="Map" >
     <a href="edittask">More Options</a>
   </div>
 </div>
-
+<!-- The Modal -->
+<div id="mapModel" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+  <iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0" 
+src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe> 
+  </div>
+</div>
   <div id='calendar'></div>
 </div>
 </body>
