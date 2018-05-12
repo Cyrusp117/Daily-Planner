@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home - Easy Planner</title>
+    <!-- Google API scripts -->
+    <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src='{% static 'connectGoogle.js' %}'></script>
+</head>
+<body>
+  <script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+      document.getElementById('login').value='Sign out';
+      document.getElementById('login').onclick='handleSignOutClick()';
+    } else {
+      document.getElementById('login').value='Sign in';
+      document.getElementById('login').onclick='handleSignInClick()';
+    }
+  </script>
+<img src="{% static "images/logo.png" %}" alt="Easy Planner"
+     style="display:block;margin-left:auto;margin-right:auto;width:251px">
+
+<input type="button" id="login">
+</body>
+</html>

@@ -5,12 +5,13 @@
     {% load static %}
     <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
     <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+    <link href='{% static 'styles.css' %}' rel='stylesheet'/>
     <script src='{% static 'lib/moment.min.js' %}'></script>
     <script src='{% static 'lib/jquery.min.js' %}'></script>
     <script src='{% static 'fullcalendar.js' %}'></script>
     <script src='{% static 'moment-timezone-with-data.js' %}'></script>
     <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
-    
+
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
@@ -19,7 +20,7 @@
     <script src='{% static 'connectGoogle.js' %}'></script>
 </head>
 <script>
-    
+
     function handleClientLoad() {
         // Loads the client library and the auth2 library together for efficiency.
         // Loading the auth2 library is optional here since `gapi.client.init` function will load
@@ -40,8 +41,8 @@
         });
     };
     function autofillform(){//auto fill the taskform
-        var taskfrm = document.forms["taskform"]; 
-        var isExist = sessionStorage.getItem("eventexist"); 
+        var taskfrm = document.forms["taskform"];
+        var isExist = sessionStorage.getItem("eventexist");
         if(isExist === 'true'){//if event already exist, autofill the taskform
             console.log(isExist);
             var eventId = sessionStorage.getItem("GeventId");
@@ -93,18 +94,18 @@
         }
     }
     function alldaydisplay(){
-        var taskfrm = document.forms["taskform"];  
+        var taskfrm = document.forms["taskform"];
         if(taskfrm.all_day.checked){
-            taskfrm.t_time.style.display = "none";    
-            taskfrm.f_time.style.display = "none";     
+            taskfrm.t_time.style.display = "none";
+            taskfrm.f_time.style.display = "none";
         }
         else{
-            taskfrm.t_time.style.display = "inline";    
-            taskfrm.f_time.style.display = "inline";   
+            taskfrm.t_time.style.display = "inline";
+            taskfrm.f_time.style.display = "inline";
         }
     }
     function checkallday(){
-        var taskfrm = document.forms["taskform"];  
+        var taskfrm = document.forms["taskform"];
         alldaydisplay();
         taskfrm.f_time.value = moment().format("hh:mm:ss");
         taskfrm.t_time.value = moment().add(1,'hour').format("hh:mm:ss");
@@ -124,7 +125,7 @@
                 _callback(response);
             }
         });
-        
+
     }
     function sliceTime(taskfrm, startTime, endTime){
         taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
@@ -151,7 +152,7 @@
         }
     }
     function saveTask(){
-        var taskfrm = document.forms["taskform"];  
+        var taskfrm = document.forms["taskform"];
         formatTime(taskfrm);
         if(!taskfrm.taskTitle.value){
             taskfrm.taskTitle.value = "No title";
@@ -244,7 +245,7 @@
             } else {
                 console.log('event added');
                 console.log(response);
-                $('#calendar').fullCalendar('addEvent', localevent); // stick? = true                         
+                $('#calendar').fullCalendar('addEvent', localevent); // stick? = true
             }
         });
     }
@@ -274,7 +275,7 @@
                       "type": localevent.type
                     }
                 }
-                
+
             };
             localevent.start = taskfrm.f_date.value;
             localevent.end = taskfrm.t_date.value;
@@ -296,7 +297,7 @@
                       "type": localevent.type
                     }
                 }
-                
+
             };
             localevent.start = f_dateTime;
             localevent.end = t_dateTime;
@@ -315,7 +316,7 @@
             } else {
                 console.log('event updated');
                 console.log(response);
-                $('#calendar').fullCalendar('updateEvent', localevent); // stick? = true                         
+                $('#calendar').fullCalendar('updateEvent', localevent); // stick? = true
             }
         });
     }
@@ -328,33 +329,40 @@
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
+  <div class="edittask">
     <p>{{taskTitle}} </p>
     <form id="taskform" method="POST">
         {% csrf_token %}
         <input type="text" name="taskTitle" placeholder="Enter title of task">
         <input type="button" name="saveBtn" value="Save" onclick="saveTask()">
-        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
+        <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
         <br>
-        From: <input type="date" name="f_date" >
+        <input type="date" name="f_date" >
         <input type="time" name="f_time" ></label>
         <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
         <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
-        To: <input type="date" name="t_date">
+        to <input type="date" name="t_date">
         <input type="time"  name="t_time">
         <br>
-        <label for="Allday">all day</label>
+        <label for="Allday">All day</label>
         <input type="checkbox" name="all_day" onclick="checkallday()">
-        <label for="EventType">EventType</label>
+        <br>
+        <label for="EventType">Event Type:</label>
         <select name="type" id="type">
-            <option value="others">others</option>
-            <option value="mealtime">mealtime</option>
-            <option value="movie">movie</option>
+            <option value="others">Other</option>
+            <option value="mealtime">Mealtime</option>
+            <option value="movie">Movie</option>
         </select>
+        <br>
         <input type="text" name="destination" placeholder="Enter destination of task">
-        <input type="textfield" name="description" placeholder="Enter description of task">
-        <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
+        <br>
+        <textarea  style="border:1px solid #eee;border-radius:4px;overflow:hidden;padding-left:10px;"
+                   name="description" placeholder="Enter description of task"
+                   cols="40" rows="3"></textarea>
+        <br>
+        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
     </form>
-
+<div>
 </body>
 <script >
     function initAutocomplete(){

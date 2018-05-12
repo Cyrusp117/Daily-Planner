@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
 
+
 def edittask(request):
     now = datetime.now()
     taskTitle = ''
@@ -27,7 +28,8 @@ def edittask(request):
 
 
 def schedule(request):
-
     context = {}
-    return render(request, 'schedule.html', context)
+    return render(request, 'selectable.html', context)
 
+def index(request):
+    return render(request, 'index.html')
