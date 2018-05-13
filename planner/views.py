@@ -26,10 +26,17 @@ def edittask(request):
     }
     return render(request, 'edit_task.html', context)
 
+def login(request):
+    context = {}
+    return render(request, 'login.html', context)
+
+def selectable(request):
+    context = {}
+    return render(request, 'selectable.html', context)
 
 def schedule(request):
     context = {}
-    return render(request, 'selectable.html', context)
+    return render(request, 'schedule.html', context)
 
 def index(request):
     return render(request, 'index.html')
