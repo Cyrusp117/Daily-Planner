@@ -23,6 +23,9 @@
     </head>
     <body>
       <div id="map"></div>
+      <ol id="restaurants">
+
+      </ol>
       <script>
         // Note: This example requires that you consent to location sharing when
         // prompted by your browser. If you see the error "The Geolocation service
@@ -34,8 +37,17 @@
               for (var i = 0; i < results.length; i++) {
                 var place = results[i];
                 createMarker(results[i]);
+                // create a list of info
+                addrestaurant(place);
               }
+              console.log(results);
             }
+          }
+          function addrestaurant(restaurant){
+            var x = document.createElement("LI");
+            var t = document.createTextNode(restaurant.name);
+            x.appendChild(t);
+            document.getElementById("restaurants").appendChild(x);
           }
         function initMap() {
           map = new google.maps.Map(document.getElementById('map'), {
