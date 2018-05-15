@@ -30,7 +30,10 @@ def login(request):
 
     context = {}
     return render(request, 'Login.html', context)
+def draft_restaurant(request):
 
+    context = {}
+    return render(request, 'draft_restaurant.html', context)
 def schedule(request):
 
     context = {}
