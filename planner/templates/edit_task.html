@@ -5,6 +5,7 @@
     {% load static %}
     <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
     <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+    <link href='{% static 'navbar.css' %}' rel='stylesheet' />
     <script src='{% static 'lib/moment.min.js' %}'></script>
     <script src='{% static 'lib/jquery.min.js' %}'></script>
     <script src='{% static 'fullcalendar.js' %}'></script>
@@ -324,6 +325,17 @@
 
 </script>
 <body>
+    <!-- The Navbar -->
+    <div class="navbar">
+        <ul>
+            <li><a href="#!">HOME</a></li>
+            <li><a href="schedule">SCHEDULE</a></li>
+            <li class="active"><a href="edittask">EDIT</a></li>
+            <li><a href="/">LOGOUT</a></li>
+        </ul>
+    </div>
+    <!-- End Of Navbar -->
+    
     <script async defer src="https://apis.google.com/js/api.js"
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
