@@ -19,6 +19,11 @@
           margin: 0;
           padding: 0;
         }
+        div.res_box {
+          width: 300px;
+          border: 25px solid rgb(8, 139, 52);
+          padding: 25px;
+        }
       </style>
     </head>
     <body>
@@ -32,6 +37,7 @@
         // failed.", it means you probably did not give permission for the browser to
         // locate you.
         var map, infoWindow;
+
         function callback(results, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
               for (var i = 0; i < results.length; i++) {
@@ -41,12 +47,30 @@
                 addrestaurant(place);
               }
               console.log(results);
+              return results;
             }
           }
           function addrestaurant(restaurant){
-            var x = document.createElement("LI");
+            var x = document.createElement("DIV");
+            x.className = "res_box";
             var t = document.createTextNode(restaurant.name);
             x.appendChild(t);
+            if(restaurant.photos){
+              var i = document.createElement("IMG");
+              i.setAttribute("src", restaurant.photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50}));
+              i.setAttribute("alt", restaurant.name);
+              x.appendChild(i);
+            }
+            var rating = document.createTextNode("Google Rating:  " + restaurant.rating);
+            
+
+            //.getUrl({'maxWidth': 35, 'maxHeight': 35})
+            var loc = document.createTextNode(restaurant.vicinity);
+            x.appendChild(document.createElement("br"));
+            x.appendChild(loc);
+            x.appendChild(document.createElement("br"));
+            x.appendChild(rating);
+            document.body.appendChild(x);
             document.getElementById("restaurants").appendChild(x);
           }
         function initMap() {
@@ -76,7 +100,7 @@
             console.log(request);
               service = new google.maps.places.PlacesService(map);
               service.nearbySearch(request, callback);
-            
+              
             }, function() {
               handleLocationError(true, infoWindow, map.getCenter());
             });
@@ -86,11 +110,20 @@
           }
         }
         function createMarker(place) {
-
+          var photos = place.photos;
+          if (!photos) {
             new google.maps.Marker({
-                position: place.geometry.location,
-                map: map
+              position: place.geometry.location,
+              map: map
             });
+            return;
+          }
+        
+          var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            title: place.name,
+          });
         }
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
           infoWindow.setPosition(pos);
@@ -103,7 +136,7 @@
       </script>
   
         <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places&callback=initMap">
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places&callback=initMap">
         </script>
 </body>
 
