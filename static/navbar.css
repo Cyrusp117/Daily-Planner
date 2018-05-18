@@ -33,7 +33,7 @@
     color: black;
 }
 
-.navbar li a.active {
-    background-color: #1E90FF;
-    color: white;
+.navbar li.active {
+    background-color: rgba(88, 86, 86, 0.945);
+    color: rgb(207, 142, 142);
 }
