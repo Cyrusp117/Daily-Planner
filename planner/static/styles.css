@@ -52,10 +52,16 @@ body {
   font-size: 14px;
 }
 
+div {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 3px;
+}
+
 form input,
 form textarea,
 form select {
-    margin-left: 2px;
     padding-left: 5px;
 }
 
@@ -69,5 +75,6 @@ form select {
   margin-left: 20%;
   margin-right: 20%;
   margin-top: 100px;
-  background-color: #99bdf7;
+  padding-left: 5px;
+  background-color: #afe2ff;
 }
