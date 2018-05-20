@@ -30,9 +30,15 @@ def login(request):
     context = {}
     return render(request, 'login.html', context)
 
-def selectable(request):
+def login(request):
+
     context = {}
-    return render(request, 'selectable.html', context)
+    return render(request, 'Login.html', context)
+def draft_restaurant(request):
+
+    context = {}
+    return render(request, 'draft_restaurant.html', context)
+def schedule(request):
 
 def schedule(request):
     context = {}
