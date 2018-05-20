@@ -79,12 +79,22 @@
 <!-- The Navbar -->
 <div class="navbar">
     <ul>
-        <li><a href="#!">HOME</a></li>
+        <li><a href="index">HOME</a></li>
         <li class="active"><a href="schedule">SCHEDULE</a></li>
         <li><a href="edittask">EDIT</a></li>
-        <li><a href="/">LOGOUT</a></li>
+        <li><a href="/" onclick="signOut();">LOGOUT</a></li>
     </ul>
 </div>
+
+<script>
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+            console.log('User signed out.');
+        });
+        auth2.disconnect();
+    }
+</script>
 <!-- End Of Navbar -->
 
   <script async defer src="https://apis.google.com/js/api.js"
