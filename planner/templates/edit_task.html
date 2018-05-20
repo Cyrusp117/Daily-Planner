@@ -6,6 +6,8 @@
     <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
     <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
     <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+    <link href='{% static 'css/bootstrap.css' %}' rel='stylesheet'/>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <script src='{% static 'lib/moment.min.js' %}'></script>
     <script src='{% static 'lib/jquery.min.js' %}'></script>
     <script src='{% static 'fullcalendar.js' %}'></script>
@@ -329,13 +331,17 @@
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
+  <img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style="width:251px;">
   <div class="edittask">
-    <p>{{taskTitle}} </p>
+
+    <!--<p>{{taskTitle}} </p>-->
     <form id="taskform" method="POST">
+        <i name="cancelBtn" style="cursor:pointer;font-size:20px;margin:0px 5px;" onclick="backToSchedule()" class="fas fa-times"></i>
         {% csrf_token %}
         <input type="text" name="taskTitle" placeholder="Enter title of task">
         <input type="button" name="saveBtn" value="Save" onclick="saveTask()">
-        <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
+        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
+        <!--<input type="button" name="cancelBtn" value="Cancel" onclick="backToSchedule()">-->
         <br>
         <input type="date" name="f_date" >
         <input type="time" name="f_time" ></label>
@@ -344,8 +350,8 @@
         to <input type="date" name="t_date">
         <input type="time"  name="t_time">
         <br>
-        <label for="Allday">All day</label>
-        <input type="checkbox" name="all_day" onclick="checkallday()">
+        <label for="Allday">All day:</label>
+        <input style="vertical-align:middle;" type="checkbox" name="all_day" onclick="checkallday()">
         <br>
         <label for="EventType">Event Type:</label>
         <select name="type" id="type">
@@ -353,13 +359,13 @@
             <option value="mealtime">Mealtime</option>
             <option value="movie">Movie</option>
         </select>
+        <br><br>
+        <div style="border-top:1px solid black;"></div>
         <br>
         <input type="text" name="destination" placeholder="Enter destination of task">
         <br>
-        <input type="text" name="description" placeholder="Enter description of task"
-                cols="40" rows="3">
-        <br>
-        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
+        <textarea type="text" name="description" placeholder="Enter description of task"
+                cols="40" rows="3"></textarea>
     </form>
 <div>
 </body>
