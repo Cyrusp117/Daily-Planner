@@ -26,9 +26,7 @@ def edittask(request):
     }
     return render(request, 'edit_task.html', context)
 
-def login(request):
-    context = {}
-    return render(request, 'login.html', context)
+
 
 def login(request):
 
@@ -38,7 +36,6 @@ def draft_restaurant(request):
 
     context = {}
     return render(request, 'draft_restaurant.html', context)
-def schedule(request):
 
 def schedule(request):
     context = {}
