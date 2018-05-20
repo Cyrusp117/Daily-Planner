@@ -65,7 +65,7 @@
 	<!-- TODO put weather api into homepage -->
 	<div class="task_box" >
 			<pre id="upcoming" style="border-bottom:1px black solid;padding-bottom:5px;"></pre>
-			<div>
+			<div id="restaurants_box" >
 					<div id="re_map" style="height:150px; width: 400px;"></div>
 					<div id="restaurants" class="resta_holder" > </div>
 			</div>
@@ -244,14 +244,17 @@
 			loc_span.appendChild(rating);
 			x.appendChild(loc_span)
 			document.getElementById("restaurants").appendChild(x);
-			console.log(restaurant);
 		}
 		
 	function initMap() {
-		map = new google.maps.Map(document.getElementById('re_map'), {
+		var restaurant_map = document.getElementById('re_map');
+		console.log(restaurant_map);
+		map = new google.maps.Map(restaurant_map), {
 			center: {lat: -34.397, lng: 150.644},
 			zoom: 15
-		});
+		};
+		console.log(map);
+		
 
 
 		// Try HTML5 geolocation.
@@ -300,7 +303,7 @@
 			}
 		});
 	}
-	
+	var map2;
 	function createMarker(place) {
 		var photos = place.photos;
 		if (!photos) {
