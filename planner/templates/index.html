@@ -7,20 +7,15 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Home - Easy Planner</title>
 
-	<link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
-	<link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
 	<script src='{% static 'lib/moment.min.js' %}'></script>
 	<script src='{% static 'lib/jquery.min.js' %}'></script>
-	<script src='{% static 'fullcalendar.js' %}'></script>
 	<script src='{% static 'moment-timezone-with-data.js' %}'></script>
-	<script type='text/javascript' src='{% static 'gcal.js' %}'></script>
 
 	<!-- Google API scripts -->
 	<link href='{% static 'styles.css' %}' rel='stylesheet'/>
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
 	<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
 	<script src="https://apis.google.com/js/api.js"></script>
-	<script src='{% static 'connectGoogle.js' %}'></script>
 	
 
 	<style type="text/css" >
@@ -65,7 +60,7 @@
 	<!-- TODO put weather api into homepage -->
 	<div class="task_box" >
 			<pre id="upcoming" style="border-bottom:1px black solid;padding-bottom:5px;"></pre>
-			<div id="restaurants_box" >
+			<div>
 					<div id="re_map" style="height:150px; width: 400px;"></div>
 					<div id="restaurants" class="resta_holder" > </div>
 			</div>
@@ -171,7 +166,7 @@
 	  gapi.client.calendar.events.list({
 		'calendarId': 'primary',
 		'timeMin':  moment().format(),
-    'timeMax':  moment().add(1, 'hours').format(),
+    	'timeMax':  moment().add(1, 'hours').format(),
 	  }).then(function(response) {
 		var events = response.result.items;
 		appendPre('Up next:', 'upcoming');
