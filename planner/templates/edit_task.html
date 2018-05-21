@@ -320,9 +320,15 @@
             }
         });
     }
+    // Movie functions start here
+    function checkMovieOption() {
+        var taskfrm = document.forms["taskform"];  
+        var option = taskfrm.type.value;
 
-
-
+        if (option == "movie") taskfrm.movieBtn.style.visibility = 'visible';
+        else taskfrm.movieBtn.style.visibility = 'hidden';
+    }
+    // Movie functions end here
 </script>
 <body>
     <!-- The Navbar -->
@@ -367,7 +373,7 @@
         <label for="Allday">all day</label>
         <input type="checkbox" name="all_day" onclick="checkallday()">
         <label for="EventType">EventType</label>
-        <select name="type" id="type">
+        <select name="type" id="type" onChange="checkMovieOption();">
             <option value="others">others</option>
             <option value="mealtime">mealtime</option>
             <option value="movie">movie</option>
@@ -375,6 +381,8 @@
         <input type="text" name="destination" placeholder="Enter destination of task">
         <input type="textfield" name="description" placeholder="Enter description of task">
         <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
+        <br>
+        <button type="button" name="movieBtn" style="visibility:hidden;">Choose Movie</button>
     </form>
 
 </body>
@@ -400,5 +408,4 @@
         });
     }
 </script>
-
 </html>
