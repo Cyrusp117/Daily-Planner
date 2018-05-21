@@ -10,13 +10,13 @@
 	<script src='{% static 'lib/moment.min.js' %}'></script>
 	<script src='{% static 'lib/jquery.min.js' %}'></script>
 	<script src='{% static 'moment-timezone-with-data.js' %}'></script>
-	
-	
+
+
 
 	<!-- Google API scripts -->
 	<link href='{% static 'styles.css' %}' rel='stylesheet'/>
 	<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
-	<script 
+	<script
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places">
 </script>
 
@@ -61,29 +61,29 @@
 	  </script>
 	<img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style='width:251px;'>
 	<br>
-	<div style="text-align:center;"> <!-- nav bar here? -->
-
+	<div style="display:block;text-align:center;"> <!-- nav bar here? -->
+		Nav bar here
 	</div>
 	<br>
 	<!-- TODO put weather api into homepage -->
-	<div class="task_box" >
-			<pre id="upcoming" style="border-bottom:1px black solid;padding-bottom:5px;"></pre>
+	<div class="task_box" style="display:inline;float:left;width:45%;">
+			<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
 			<div id="restaurant_box" style="display: none" >
 					<div id="re_map" style="height:150px; width: 400px;"></div>
 					<div id="restaurants" class="resta_holder" > </div>
 			</div>
-			
+
 			<pre id="content"></pre>
 	</div>
 
 
-	<div style="border-left:1px black solid;background-color:#afe2ff;display:inline;float:right;width:45%;">
-		
+	<div style="border-left:1px #c8c8c8 solid;background-color:#90D9F9;display:inline;float:right;width:50%;">
+
 		<div id="weather">
 			<h2>Weather</h2>
 			Stuff goes here
 		</div>
-		
+
 			<iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
 			src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
 	</div>
@@ -202,7 +202,7 @@
 		  appendPre('No event now', 'upcoming');
 		}
 	}).then(function(response) {
-		initMap2();	
+		initMap2();
 	});
 	  }
 
@@ -237,7 +237,7 @@
 				x.appendChild(i);
 			}
 			var rating = document.createTextNode("Google Rating:  " + restaurant.rating);
-			
+
 
 			//.getUrl({'maxWidth': 35, 'maxHeight': 35})
 			var loc = document.createTextNode(restaurant.vicinity);
@@ -252,7 +252,7 @@
 			x.appendChild(loc_span)
 			document.getElementById("restaurants").appendChild(x);
 		}
-		
+
 	function initMap() {
 		var restaurant_box = document.getElementById('restaurant_box');
 		restaurant_box.style.display = "block";
@@ -281,7 +281,7 @@
 				};
 			console.log(request);
 			searchIfMealtime(map, request);
-				
+
 			}, function() {
 				handleLocationError(true, currentloc, map.getCenter());
 			});
@@ -310,14 +310,14 @@
 			// Browser doesn't support Geolocation
 			handleLocationError(false, currentloc, map.getCenter());
 		}
-		
+
 	}
 	function searchIfMealtime(map, loc){
 		var request = gapi.client.calendar.events.list({
 			'calendarId': 'primary',
 			'timeMin':  moment().format(),
 			'timeMax':  moment().add(1, 'hours').format(),
-			'privateExtendedProperty' : 'type = mealtime' 
+			'privateExtendedProperty' : 'type = mealtime'
 		});
 		request.execute(function(response){
 			console.log(response);
@@ -325,7 +325,7 @@
 				if(response.items[0].extendedProperties.private.type === 'mealtime'){
 					service = new google.maps.places.PlacesService(map);
 					service.nearbySearch(loc, callback);
-				} 
+				}
 			}
 		});
 	}
@@ -338,7 +338,7 @@
 			});
 			return;
 		}
-		
+
 		var marker = new google.maps.Marker({
 			map: map,
 			position: place.geometry.location,

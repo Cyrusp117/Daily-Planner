@@ -348,33 +348,36 @@
     <form id="taskform" method="POST">
         <i name="cancelBtn" style="cursor:pointer;font-size:20px;margin:0px 5px;" onclick="backToSchedule()" class="fas fa-times"></i>
         {% csrf_token %}
-        <input type="text" name="taskTitle" placeholder="Enter title of task">
-        <input type="button" name="saveBtn" value="Save" onclick="saveTask()">
-        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
+        <input class="form-control" style="width:200px;display:inline;" type="text" name="taskTitle" placeholder="Enter title of task">
+        <input type="button" class="btn btn-primary" name="saveBtn" value="Save" onclick="saveTask()">
+        <input type="button" class="btn" name="delBtn" value="Delete" onclick="deleteTask()">
         <!--<input type="button" name="cancelBtn" value="Cancel" onclick="backToSchedule()">-->
         <br>
-        <input type="date" name="f_date" >
-        <input type="time" name="f_time" ></label>
+        <input class="form-control" style="width:150px;display:inline;" type="date" name="f_date" >
+        <input class="form-control" style="width:100px;display:inline;" type="time" name="f_time" ></label>
         <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
         <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
-        to <input type="date" name="t_date">
-        <input type="time"  name="t_time">
+        <div style="display:inline-block;margin-left:0px;padding-left:0px;">
+        to <input class="form-control" style="width:150px;display:inline;" type="date" name="t_date">
+        <input class="form-control" style="width:100px;display:inline;" type="time"  name="t_time">
+        </div>
         <br>
-        <label for="Allday">All day:</label>
-        <input style="vertical-align:middle;" type="checkbox" name="all_day" onclick="checkallday()">
+        <div style="margin-top:5px;"></div>
+        <label for="Allday">All day:
+            <input style="vertical-align:middle;" type="checkbox" name="all_day" onclick="checkallday()">
+        </label>
         <br>
         <label for="EventType">Event Type:</label>
-        <select name="type" id="type">
+        <select class="form-control" style="width:150px;display:inline;" id="type">
             <option value="others">Other</option>
             <option value="mealtime">Mealtime</option>
             <option value="movie">Movie</option>
         </select>
         <br><br>
-        <div style="border-top:1px solid black;"></div>
+        <div style="border-top:1px solid #c8c8c8;"></div>
         <br>
-        <input type="text" name="destination" placeholder="Enter destination of task">
-        <br>
-        <textarea type="text" name="description" placeholder="Enter description of task"
+        <input class="form-control" style="width:200px;" type="text" name="destination" placeholder="Enter destination of task">
+        <textarea class="form-control" style="width:400px;" type="text" name="description" placeholder="Enter description of task"
                 cols="40" rows="3"></textarea>
     </form>
 <div>
