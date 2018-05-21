@@ -385,31 +385,42 @@
                 <span class="close" onclick="closeMovieModal();">&times;</span>
                 <label for="searchBox">Search Movie:</label> <br>
                 <input type="text" id="searchBox" name="searchBox" placeholder="Enter movie title">
-                <input type="button" name="searchBtn" value="Search"> <br><br>
+                <input type="button" name="searchBtn" value="Search" onclick="findCinemas();"> <br><br>
                 <select name="cinemas">
                 </select>
                 <select name="showtimes">
                 </select><br><br>
-                <input type="button" name="completeBtn" value="Complete" onclick="closeMovieModal();">
+                <input type="button" name="completeBtn" value="Complete" onclick="submitMovieInfo();">
             </div>
         </div>
         <!-- End Of Movie Modal -->
 
         <!-- The Movie Functions -->
         <script>
-        function checkMovieOption() {
+        function checkMovieOption() {           // Displays "Choose Movie" button when movie option selected
             var taskfrm = document.forms["taskform"];  
             var option = taskfrm.type.value;
             if (option == "movie") taskfrm.movieBtn.style.visibility = 'visible';
             else taskfrm.movieBtn.style.visibility = 'hidden';
         }
-        function displayMovieModal() {
+        function displayMovieModal() {          // Display the movie modal box
             var modal = document.getElementById("movieModal");
             modal.style.display = "block";
         }
-        function closeMovieModal() {
+        function closeMovieModal() {            // Close the movie modal box
             var modal = document.getElementById("movieModal");
             modal.style.display = "none";
+        }
+        function removeOptions(selectbox) {     // Clear a drop-down list
+            for (var i = selectbox.options.length - 1; i >= 0; i--) {
+                selectbox.remove(i);
+            }
+        }
+        function findCinemas() {
+
+        }
+        function submitMovieInfo() {
+            closeMovieModal();
         }
         </script>
         <!-- End Of Movie Functions -->
