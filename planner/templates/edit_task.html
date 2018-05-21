@@ -211,6 +211,11 @@
                 },
                 'end': {
                     'date': taskfrm.t_date.value
+                },
+                "extendedProperties": {
+                    "private": {
+                      "type": localevent.type
+                    }
                 }
             };
             localevent.start = taskfrm.f_date.value;
@@ -227,6 +232,11 @@
                 },
                 'end': {
                     'dateTime': t_dateTime
+                },
+                "extendedProperties": {
+                    "private": {
+                      "type": localevent.type
+                    }
                 }
             };
             localevent.start = f_dateTime;

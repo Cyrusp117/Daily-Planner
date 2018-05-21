@@ -10,13 +10,17 @@
 	<script src='{% static 'lib/moment.min.js' %}'></script>
 	<script src='{% static 'lib/jquery.min.js' %}'></script>
 	<script src='{% static 'moment-timezone-with-data.js' %}'></script>
+	
+	
 
 	<!-- Google API scripts -->
 	<link href='{% static 'styles.css' %}' rel='stylesheet'/>
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
 	<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
-	<script src="https://apis.google.com/js/api.js"></script>
-	
+	<script 
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places">
+</script>
+
+<script src='{% static 'geolocation-marker.js' %}'></script>
 
 	<style type="text/css" >
 		html, body {
@@ -51,6 +55,10 @@
 
 </head>
   <body>
+		<script async defer src="https://apis.google.com/js/api.js"
+		onload="this.onload=function(){};handleClientLoad()"
+		onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	  </script>
 	<img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style='width:251px;'>
 	<br>
 	<div style="text-align:center;"> <!-- nav bar here? -->
@@ -60,7 +68,7 @@
 	<!-- TODO put weather api into homepage -->
 	<div class="task_box" >
 			<pre id="upcoming" style="border-bottom:1px black solid;padding-bottom:5px;"></pre>
-			<div>
+			<div id="restaurant_box" style="display: none" >
 					<div id="re_map" style="height:150px; width: 400px;"></div>
 					<div id="restaurants" class="resta_holder" > </div>
 			</div>
@@ -75,7 +83,7 @@
 			<h2>Weather</h2>
 			Stuff goes here
 		</div>
-		<div id="map">
+		<div id="map" style="height:600px; width: 450px;">
 			<h2>Map</h2>
 			Stuff goes here
 		</div>
@@ -94,6 +102,7 @@
 	  var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
 		var map, currentloc;
+		var currEvent;
 
 	  /**
 	   *  On load, called to load the auth2 library and API client library.
@@ -115,7 +124,9 @@
 	  }).then(function () {
 				getNextEvent();
 				listUpcomingEvents();
-	  	});
+	  	}).then(function (){
+			initMap2();
+		}) ;
 	  }
 
 	  /**
@@ -173,6 +184,8 @@
 
 		if (events.length > 0) {
 			var event = events[0];
+			currEvent = event;
+			console.log(currEvent);
 			var when = event.start.dateTime;
 			if (!when) {
 			  when = event.start.date;
@@ -242,14 +255,15 @@
 		}
 		
 	function initMap() {
-		var restaurant_map = document.getElementById('re_map');
-		console.log(restaurant_map);
-		map = new google.maps.Map(restaurant_map), {
+		var restaurant_box = document.getElementById('restaurant_box');
+		restaurant_box.style.display = "block";
+		console.log(restaurant_box);
+		map = new google.maps.Map(document.getElementById('re_map'), {
 			center: {lat: -34.397, lng: 150.644},
 			zoom: 15
-		};
+		});
+		var GeoMarker = new GeolocationMarker(map);
 		console.log(map);
-		
 
 
 		// Try HTML5 geolocation.
@@ -259,10 +273,6 @@
 					lat: position.coords.latitude,
 					lng: position.coords.longitude
 				};
-				currentloc = new google.maps.Marker({
-					position: pos,
-					map: map
-				});
 
 				map.setCenter(pos);
 				var request = {
@@ -279,6 +289,50 @@
 		} else {
 			// Browser doesn't support Geolocation
 			handleLocationError(false, currentloc, map.getCenter());
+		}
+	}
+	var map2;
+	function initMap2() {
+		var mapOptions = {
+			zoom: 17,
+			center: new google.maps.LatLng(-34.397, 150.644),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		var map2 = new google.maps.Map(document.getElementById('map'),
+			mapOptions);
+		var GeoMarker = new GeolocationMarker(map2);
+		console.log(map2);
+
+
+		// Try HTML5 geolocation.
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var pos = {
+					lat: position.coords.latitude,
+					lng: position.coords.longitude
+				};
+
+				map2.setCenter(pos);
+				if(currEvent.location){//set marker for destination
+					var geocoder = new google.maps.Geocoder();
+					geocoder.geocode( { 'address': currEvent.location}, function(results, status) {
+						if (status == 'OK') {
+						  map2.setCenter(results[0].geometry.location);
+						  var marker = new google.maps.Marker({
+							  map: map2,
+							  position: results[0].geometry.location
+						  });
+						} else {
+						  alert('Geocode was not successful for the following reason: ' + status);
+						}
+					});
+				}
+			}, function() {
+				handleLocationError(true, currentloc, map2.getCenter());
+			});
+		} else {
+			// Browser doesn't support Geolocation
+			handleLocationError(false, currentloc, map2.getCenter());
 		}
 	}
 	function searchIfMealtime(map, loc){
@@ -298,7 +352,6 @@
 			}
 		});
 	}
-	var map2;
 	function createMarker(place) {
 		var photos = place.photos;
 		if (!photos) {
@@ -308,7 +361,7 @@
 			});
 			return;
 		}
-	
+		
 		var marker = new google.maps.Marker({
 			map: map,
 			position: place.geometry.location,
@@ -324,8 +377,6 @@
 	}
 	</script>
 
-	<script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places&callback=handleClientLoad">
-</script>
+
   </body>
 </html>
