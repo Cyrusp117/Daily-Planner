@@ -12,6 +12,7 @@
         <script src='{% static 'fullcalendar.js' %}'></script>
         <script src='{% static 'moment-timezone-with-data.js' %}'></script>
         <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
+        <script type='text/javascript' src='{% static 'scripts.js' %}'></script>
 
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
@@ -43,22 +44,8 @@
                 <li><a href="/" onclick="signOut();">LOGOUT</a></li>
             </ul>
         </div>
-
-        <script>
-            function signOut() {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function () {
-                    console.log('User signed out.');
-                });
-                auth2.disconnect();
-            }
-        </script>
         <!-- End Of Navbar -->
 
-        <script async defer src="https://apis.google.com/js/api.js"
-                onload="this.onload=function(){};handleClientLoad()"
-                onreadystatechange="if (this.readyState === 'complete') this.onload()">
-        </script>
         <!-- <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button> -->
         <pre id="content"></pre>
 
@@ -88,5 +75,10 @@
             </div>
             <div id='calendar'></div>
         </div>
+
+        <script async defer src="https://apis.google.com/js/api.js"
+                onload="this.onload=function(){};handleClientLoad()"
+                onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
     </body>
 </html>
