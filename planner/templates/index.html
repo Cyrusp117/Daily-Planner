@@ -52,24 +52,28 @@
 
 	<body>
 		<script async defer src="https://apis.google.com/js/api.js"
-				onload="this.onload=function(){};handleClientLoad()"
-				onreadystatechange="if (this.readyState === 'complete') this.onload()">
-		</script>
-
-		<img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style='width:251px;'><br>
+		onload="this.onload=function(){};handleClientLoad()"
+		onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	  </script>
+	<img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style='width:251px;'>
+	<br>
 		<!-- The Navbar -->
 		<div class="navbar">
-			<ul>
-				<li class="active"><a href="index">HOME</a></li>
-				<li><a href="schedule">SCHEDULE</a></li>
-				<li><a href="edittask">EDIT</a></li>
-				<li><a href="welcome" onclick="signOut();">LOGOUT</a></li>
-			</ul>
-		</div><br>
-		<!-- End Of Navbar -->
-
-		<!-- TODO put weather api into homepage -->
-		<div class="task_box" style="display:inline;float:left;width:45%;">
+				<ul>
+					<li class="active"><a href="index">HOME</a></li>
+					<li><a href="schedule">SCHEDULE</a></li>
+					<li><a href="edittask">EDIT</a></li>
+					<li><a href="welcome" onclick="signOut();">LOGOUT</a></li>
+				</ul>
+			</div><br>
+			<!-- End Of Navbar -->
+	<br>
+	<a class="weatherwidget-io" href="https://forecast7.com/en/n33d87151d21/sydney/" data-label_1="SYDNEY" data-label_2="WEATHER" data-theme="retro-sky" >SYDNEY WEATHER</a>
+	<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+	</script>
+	<!-- TODO put weather api into homepage -->
+	<div class="task_box" style="display:inline;float:left;width:45%;">
 			<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
 			<div id="restaurant_box" style="display: none" >
 				<div id="re_map" style="height:150px; width: 400px;"></div>
