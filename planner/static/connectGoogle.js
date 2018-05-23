@@ -40,7 +40,7 @@ var primaryevents = [];//the events array of primary calendar
       console.log(response.result);
       handleSyncEvents()
     }, function(reason) {
-      console.log('Error: ');
+      console.log('Error: ' + reason);
     });
   };
   

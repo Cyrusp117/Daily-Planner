@@ -339,9 +339,43 @@
             }
         });
     }
+</script>
+    <body>
+        <div class="navbar">
+            <ul>
+                <li><a href="index">HOME</a></li>
+                <li><a href="schedule">SCHEDULE</a></li>
+                <li class="active"><a href="edittask">EDIT</a></li>
+                <li><a href="/" onclick="signOut();">LOGOUT</a></li>
+            </ul>
+        </div>
 
-
-
+        <p>{{taskTitle}} </p>
+        <form id="taskform" method="POST">
+            {% csrf_token %}
+            <input type="text" name="taskTitle" placeholder="Enter title of task">
+            <input type="button" name="saveBtn" value="Save" onclick="saveTask()">
+            <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
+            <br>
+            From: <input type="date" name="f_date" >
+            <input type="time" name="f_time" ></label>
+            <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
+            <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
+            To: <input type="date" name="t_date">
+            <input type="time"  name="t_time">
+            <br>
+            <label for="Allday">All Day:</label>
+            <input type="checkbox" name="all_day" onclick="checkallday()">
+            <label for="EventType">EventType</label>
+            <select name="type" id="type" onChange="checkMovieOption();">
+                <option value="others">Others</option>
+                <option value="mealtime">Mealtime</option>
+            </select>
+            <input type="text" name="destination" placeholder="Enter destination of task">
+            <input type="textfield" name="description" placeholder="Enter description of task">
+            <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
+            <br>
+        </form>
 </script>
 <body>
     <script async defer src="https://apis.google.com/js/api.js"
@@ -387,7 +421,7 @@
         <textarea class="form-control" style="width:400px;" type="text" name="description" placeholder="Enter description of task"
                 cols="40" rows="3"></textarea>
     </form>
-<div>
+<div></div>
 </body>
 <script >
     function initAutocomplete(){
