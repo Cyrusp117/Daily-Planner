@@ -7,11 +7,10 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Home - Easy Planner</title>
 
-		<link href='{% static 'styles.css' %}' rel='stylesheet'/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 		<script src='{% static 'lib/moment.min.js' %}'></script>
 		<script src='{% static 'lib/jquery.min.js' %}'></script>
 		<script src='{% static 'moment-timezone-with-data.js' %}'></script>
-		<script type='text/javascript' src='{% static 'scripts.js' %}'></script>
 
 		<!-- Google API scripts -->
 		<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
@@ -52,22 +51,38 @@
 
 	<body>
 		<script async defer src="https://apis.google.com/js/api.js"
-		onload="this.onload=function(){};handleClientLoad()"
-		onreadystatechange="if (this.readyState === 'complete') this.onload()">
-	  </script>
-	<img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style='width:251px;'>
-	<br>
+				onload="this.onload=function(){};handleClientLoad()"
+				onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	   </script>
+	
 		<!-- The Navbar -->
-		<div class="navbar">
-				<ul>
-					<li class="active"><a href="index">HOME</a></li>
-					<li><a href="schedule">SCHEDULE</a></li>
-					<li><a href="edittask">EDIT</a></li>
-					<li><a href="welcome" onclick="signOut();">LOGOUT</a></li>
-				</ul>
-			</div><br>
-			<!-- End Of Navbar -->
-	<br>
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="index">HOME</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="schedule">SCHEDULE</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="edittask">EDIT</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
+				</li>
+			</ul>
+		</nav>
+
+		<script>
+			function signOut() {
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+					console.log('User signed out.');
+				});
+				auth2.disconnect();
+            }
+		</script>
+		<!-- End Of Navbar -->
 	<a class="weatherwidget-io" href="https://forecast7.com/en/n33d87151d21/sydney/" data-label_1="SYDNEY" data-label_2="WEATHER" data-theme="retro-sky" >SYDNEY WEATHER</a>
 	<script>
 	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
@@ -92,7 +107,6 @@
 		<iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
 				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
 		</div>
-
 		<script>
 			// Client ID and API key from the Developer Console
 			var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
