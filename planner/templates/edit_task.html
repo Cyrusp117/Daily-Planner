@@ -342,7 +342,7 @@
 
     <body>
         <!-- The Navbar -->
-		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark" style="height:50px;">
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
@@ -356,8 +356,10 @@
                     </li>
                 </ul>
             </div>
-            <div class="mx-auto order-0">
-                <a class="navbar-brand mx-auto" href="#">Easy Planner</a>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="mx-auto" href="#">
+                    <img src="{% static "BWLogo2.png" %}">
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -387,7 +389,6 @@
                 onreadystatechange="if (this.readyState === 'complete') this.onload()">
         </script>
 
-        <img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style="width:251px;">
         <div class="edittask">
             <!--<p>{{taskTitle}} </p>-->
             <form id="taskform" method="POST">
