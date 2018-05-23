@@ -25,6 +25,7 @@ from django.conf.urls import include
 from django.conf.urls import url
 urlpatterns += [
     url(r'^planner/', include('planner.urls')),
+    url(r'^uber_auth/', include('uber_auth.urls')),
 ]
 #Add URL maps to redirect the base URL to our application
 from django.views.generic import RedirectView
