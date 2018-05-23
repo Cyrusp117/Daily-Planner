@@ -1,51 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        {% load static %}
-        <!--insert google sign in-->
-        <meta charset='utf-8' />
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
-        <script src="https://apis.google.com/js/api.js"></script>
-        <script type='text/javascript' src='{% static 'scripts.js' %}'></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <style>
-            h1 {
-                text-align: center;
-                font-family: "Verdana"; 
-                font-size: 80px;  
-                color: grey;
-            }
-            h2 {
-                text-align: center;
-                font-family: "Verdana";
-                font-size: 40px;
-                font-weight: normal; 
-                color: grey;
-            }
-            p {
-                text-align: center;
-                font-family: "Verdana"; 
-                color: grey;
-            }
-            body {
-                border-top: 100px solid dodgerblue;
-                border-left: 100px solid dodgerblue;
-            }
-        </style>
-        <!--title for the tab-->
-        <title>Welcome!</title>
-    </head>
+<html>
+<head>
+ {% load static %}
+     <!--insert google sign in-->
+     <meta charset='utf-8' />
+     <script src="https://apis.google.com/js/platform.js" async defer></script>
+     <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+     <script src="https://apis.google.com/js/api.js"></script>
+     <script type='text/javascript' src='{% static 'scripts.js' %}'></script>
+     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
-    <body>
-        <h1><b>Easy Planner</b></h1>
-        <h2>Welcome!</h2> 
-        <p>Start planning your day. Sign in using your Google Account.</p><br><br>
 
-        <div id="my-signin2"></div>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+    <link href="../../../../dist/css/bootstrap.min.css" rel="stylesheet">
+    
+       <!-- Custom styles for this template -->
+    <link href="welcome.css" rel="stylesheet">
+
+<style>
+h1 {
+   text-align: center;
+   font-family: "Verdana"; 
+   font-size: 80px;  
+   color: 	 #004280;
+}
+h2 {
+   text-align: center;
+   font-family: "Verdana";
+   font-size: 40px;
+   font-weight: normal; 
+   color: #004280;
+}
+p {
+   text-align: center;
+   font-family: "Verdana"; 
+   color: #004d99
+;
+}
+<!--#0099ff-->
+
+</style>
+<!--title for the tab-->
+<title>Welcome!</title>
+</head>
+<body>
+
+<img src="https://i0.wp.com/www.therny.com/wp-content/uploads/2017/06/Desk-Background-4AE.jpg?ssl=1" width=100% height=400px>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href=".css" rel="stylesheet">
+
+<h1><b>Easy Planner</b></h1>
+
+<h2>Welcome!</h2> 
+<p>Start planning your day. Sign in using your Google Account.</p>
+
+
+
+     <!-- Marketing messaging and featurettes
+      ================================================== -->
+      <!-- Wrap the rest of the page in another container to center all the content. -->
+
+      <div class="container marketing">
+
+        <!-- Three columns of text below the sign in -->
+        <div class="row">
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/216/216275.svg" alt="Generic placeholder image" width="140" height="140">
+            <h2>Easy to Use</h2>
+            <p>Plan your day effortlessly with Easy Planner.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://www.androidpolice.com/wp-content/uploads/2016/09/nexus2cee_circular_base.png" alt="Generic placeholder image" width="140" height="140">
+            <h2>Google Calendar</h2>
+            <p>Integrate with your Google Account.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://developer.apple.com/watchos/human-interface-guidelines/images/icon-and-image-large-icon-weather_2x.png" alt="Generic placeholder image" width="140" height="140">
+            <h2>Weather</h2> 
+            <!--https://upload.wikimedia.org/wikipedia/commons/b/bf/Circle-icons-weather.svg-->
+            <p>Know the weather outside to plan your day.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="http://www.proaimsresources.com/wp-content/uploads/Google-map.png" alt="Generic placeholder image" width="140" height="140">
+            <h2>Map</h2>
+            <p>Know the route to your destination</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/215/215824.svg" alt="Generic placeholder image" width="140" height="140">
+            <h2>Meal Time</h2>
+            <p>Choose from a list of restaurants, based on location to dine at.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://pbs.twimg.com/profile_images/906098350235283456/Oyf51gU0_400x400.jpg" alt="Generic placeholder image" width="140" height="140">
+            <h2>Uber</h2>
+            <p>Book an Uber to reach your destination</p>
+          </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+      </div><!-- marketing container -->        
+
+   <div id="my-signin2"></div>
         <a href="#" onclick="signOut()">Sign out</a>
 
         <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
-    </body>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../../../assets/js/vendor/popper.min.js"></script>
+    <script src="../../../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../../../assets/js/vendor/holder.min.js"></script>
+
+
+  </body>
 </html>
