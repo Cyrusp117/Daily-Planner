@@ -8,6 +8,7 @@ urlpatterns = [
      url(r'^schedule$', views.schedule),
      url(r'^index$', views.index),
      url(r'^draft_restaurant$', views.draft_restaurant),
+     url(r'^welcome$', views.welcome),
      url(r'^$', views.login),
 
 ]
