@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+h1 {
+   text-align: center;
+   font-family: "Verdana"; 
+   font-size: 80px;  
+   color: grey;
+}
+h2 {
+   text-align: center;
+   font-family: "Verdana";
+   font-size: 40px;
+   font-weight: normal; 
+   color: grey;
+}
+p {
+   text-align: center;
+   font-family: "Verdana"; 
+   color: grey;
+}
+body {
+   border-top: 100px solid dodgerblue;
+   border-left: 100px solid dodgerblue;
+}
+</style>
+<!--title for the tab-->
+<title>Welcome!</title>
+</head>
+<body>
+
+<h1><b>Easy Planner</b></h1>
+
+<h2>Welcome!</h2> 
+<p>Start planning your day. Sign in using your Google Account.</p>
+
+<!--insert google sign in-->
+<meta charset='utf-8' />
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/api.js"></script>
+<script src='{% static 'connectGoogle.js' %}'></script>
+
+  </body>
+</html>
