@@ -99,7 +99,6 @@
 	<script>
 	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
 	</script>
-	<!-- TODO put weather api into homepage -->
 	<div class="task_box" style="display:inline;float:left;width:45%;">
 			<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
 			<div id="restaurant_box" style="display: none" >
@@ -111,15 +110,10 @@
 
 		<div style="border-left:1px #c8c8c8 solid;background-color:#90D9F9;display:inline;float:right;width:50%;">
 
-		<div id="weather">
-			<h2>Weather</h2>
-			<!--Stuff goes here-->
-		</div>
-
 		<iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
 				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
 		</div>
-		<script>
+		<script type="text/javascript">
 			// Client ID and API key from the Developer Console
 			var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
 			var API_KEY = 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg';
@@ -219,10 +213,16 @@
 							when = event.start.date;
 						}
 						appendPre(event.summary + ' (' + when + ')', 'upcoming');
-						if (event.location) appendPre('    ' + event.location, 'upcoming');
-						if (event.description) appendPre('    ' + event.description, 'upcoming');
+						if (event.location){
+							appendPre('    ' + event.location, 'upcoming');
+						}
+						if (event.description) {
+							appendPre('    ' + event.description, 'upcoming');
+						}
 						if(event.extendedProperties){
-							if(event.extendedProperties.private.type === 'mealtime') initMap();
+							if(event.extendedProperties.private.type === 'mealtime'){
+								initMap();
+							} 
 						}
 					} else {
 						appendPre('No event now', 'upcoming');
