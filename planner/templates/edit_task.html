@@ -5,21 +5,31 @@
     {% load static %}
     <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
     <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+    <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+    <link href='{% static 'css/bootstrap.css' %}' rel='stylesheet'/>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <script src='{% static 'lib/moment.min.js' %}'></script>
     <script src='{% static 'lib/jquery.min.js' %}'></script>
     <script src='{% static 'fullcalendar.js' %}'></script>
     <script src='{% static 'moment-timezone-with-data.js' %}'></script>
     <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
-    
+
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places&callback=initAutocomplete" async defer></script>
     <script src='{% static 'connectGoogle.js' %}'></script>
+    <style>
+        body {
+            background-image: url("http://ikconinfotech.com/blog/wp-content/uploads/2018/03/web-designer-pune-background.jpg");
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <script>
-    
+
     function handleClientLoad() {
         // Loads the client library and the auth2 library together for efficiency.
         // Loading the auth2 library is optional here since `gapi.client.init` function will load
@@ -40,8 +50,8 @@
         });
     };
     function autofillform(){//auto fill the taskform
-        var taskfrm = document.forms["taskform"]; 
-        var isExist = sessionStorage.getItem("eventexist"); 
+        var taskfrm = document.forms["taskform"];
+        var isExist = sessionStorage.getItem("eventexist");
         if(isExist === 'true'){//if event already exist, autofill the taskform
             console.log(isExist);
             var eventId = sessionStorage.getItem("GeventId");
@@ -93,18 +103,18 @@
         }
     }
     function alldaydisplay(){
-        var taskfrm = document.forms["taskform"];  
+        var taskfrm = document.forms["taskform"];
         if(taskfrm.all_day.checked){
-            taskfrm.t_time.style.display = "none";    
-            taskfrm.f_time.style.display = "none";     
+            taskfrm.t_time.style.display = "none";
+            taskfrm.f_time.style.display = "none";
         }
         else{
-            taskfrm.t_time.style.display = "inline";    
-            taskfrm.f_time.style.display = "inline";   
+            taskfrm.t_time.style.display = "inline";
+            taskfrm.f_time.style.display = "inline";
         }
     }
     function checkallday(){
-        var taskfrm = document.forms["taskform"];  
+        var taskfrm = document.forms["taskform"];
         alldaydisplay();
         taskfrm.f_time.value = moment().format("hh:mm:ss");
         taskfrm.t_time.value = moment().add(1,'hour').format("hh:mm:ss");
@@ -124,7 +134,7 @@
                 _callback(response);
             }
         });
-        
+
     }
     function sliceTime(taskfrm, startTime, endTime){
         taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
@@ -151,7 +161,7 @@
         }
     }
     function saveTask(){
-        var taskfrm = document.forms["taskform"];  
+        var taskfrm = document.forms["taskform"];
         formatTime(taskfrm);
         if(!taskfrm.taskTitle.value){
             taskfrm.taskTitle.value = "No title";
@@ -210,6 +220,11 @@
                 },
                 'end': {
                     'date': taskfrm.t_date.value
+                },
+                "extendedProperties": {
+                    "private": {
+                      "type": localevent.type
+                    }
                 }
             };
             localevent.start = taskfrm.f_date.value;
@@ -226,6 +241,11 @@
                 },
                 'end': {
                     'dateTime': t_dateTime
+                },
+                "extendedProperties": {
+                    "private": {
+                      "type": localevent.type
+                    }
                 }
             };
             localevent.start = f_dateTime;
@@ -244,7 +264,7 @@
             } else {
                 console.log('event added');
                 console.log(response);
-                $('#calendar').fullCalendar('addEvent', localevent); // stick? = true                         
+                $('#calendar').fullCalendar('addEvent', localevent); // stick? = true
             }
         });
     }
@@ -274,7 +294,7 @@
                       "type": localevent.type
                     }
                 }
-                
+
             };
             localevent.start = taskfrm.f_date.value;
             localevent.end = taskfrm.t_date.value;
@@ -296,7 +316,7 @@
                       "type": localevent.type
                     }
                 }
-                
+
             };
             localevent.start = f_dateTime;
             localevent.end = t_dateTime;
@@ -315,7 +335,7 @@
             } else {
                 console.log('event updated');
                 console.log(response);
-                $('#calendar').fullCalendar('updateEvent', localevent); // stick? = true                         
+                $('#calendar').fullCalendar('updateEvent', localevent); // stick? = true
             }
         });
     }
@@ -328,33 +348,46 @@
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
-    <p>{{taskTitle}} </p>
+  <img src="{% static "images/logo.png" %}" alt="Easy Planner" class="center" style="width:251px;">
+  <div class="edittask">
+
+    <!--<p>{{taskTitle}} </p>-->
     <form id="taskform" method="POST">
+        <i name="cancelBtn" style="cursor:pointer;font-size:20px;margin:0px 5px;" onclick="backToSchedule()" class="fas fa-times"></i>
         {% csrf_token %}
-        <input type="text" name="taskTitle" placeholder="Enter title of task">
-        <input type="button" name="saveBtn" value="Save" onclick="saveTask()">
-        <input type="button" name="delBtn" value="Delete" onclick="deleteTask()">
+        <input class="form-control" style="width:200px;display:inline;" type="text" name="taskTitle" placeholder="Enter title of task">
+        <input type="button" class="btn btn-primary" name="saveBtn" value="Save" onclick="saveTask()">
+        <input type="button" class="btn" name="delBtn" value="Delete" onclick="deleteTask()">
+        <!--<input type="button" name="cancelBtn" value="Cancel" onclick="backToSchedule()">-->
         <br>
-        From: <input type="date" name="f_date" >
-        <input type="time" name="f_time" ></label>
+        <input class="form-control" style="width:150px;display:inline;" type="date" name="f_date" >
+        <input class="form-control" style="width:100px;display:inline;" type="time" name="f_time" ></label>
         <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
         <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
-        To: <input type="date" name="t_date">
-        <input type="time"  name="t_time">
+        <div style="display:inline-block;margin-left:0px;padding-left:0px;">
+        to <input class="form-control" style="width:150px;display:inline;" type="date" name="t_date">
+        <input class="form-control" style="width:100px;display:inline;" type="time"  name="t_time">
+        </div>
         <br>
-        <label for="Allday">all day</label>
-        <input type="checkbox" name="all_day" onclick="checkallday()">
-        <label for="EventType">EventType</label>
-        <select name="type" id="type">
-            <option value="others">others</option>
-            <option value="mealtime">mealtime</option>
-            <option value="movie">movie</option>
+        <div style="margin-top:5px;"></div>
+        <label for="Allday">All day:
+            <input style="vertical-align:middle;" type="checkbox" name="all_day" onclick="checkallday()">
+        </label>
+        <br>
+        <label for="EventType">Event Type:</label>
+        <select class="form-control" style="width:150px;display:inline;" id="type">
+            <option value="others">Other</option>
+            <option value="mealtime">Mealtime</option>
+            <option value="movie">Movie</option>
         </select>
-        <input type="text" name="destination" placeholder="Enter destination of task">
-        <input type="textfield" name="description" placeholder="Enter description of task">
-        <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
+        <br><br>
+        <div style="border-top:1px solid #c8c8c8;"></div>
+        <br>
+        <input class="form-control" style="width:200px;" type="text" name="destination" placeholder="Enter destination of task">
+        <textarea class="form-control" style="width:400px;" type="text" name="description" placeholder="Enter description of task"
+                cols="40" rows="3"></textarea>
     </form>
-
+<div>
 </body>
 <script >
     function initAutocomplete(){
