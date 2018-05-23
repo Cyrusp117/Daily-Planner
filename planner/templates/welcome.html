@@ -101,6 +101,17 @@ body {
           <div id="my-signin2" onclick="checksignin()"></div>
           <a href="#" onclick="signOut()">Sign out</a>
           <script>
+            // Client ID and API key from the Developer Console
+            var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
+            var API_KEY = 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg';
+
+            // Array of API discovery doc URLs for APIs used by the quickstart
+            var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+
+            // Authorization scopes required by the API; multiple scopes can be
+            // included, separated by spaces.
+            var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+
             var changepage = 0;
             function checksignin(){
               changepage++;
@@ -117,7 +128,7 @@ body {
             }
             function renderButton() {
               gapi.signin2.render('my-signin2', {
-                'scope': 'profile email',
+                'scope': 'profile email https://www.googleapis.com/auth/calendar',
                 'width': 240,
                 'height': 50,
                 'longtitle': true,

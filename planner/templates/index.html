@@ -16,103 +16,6 @@
 		<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places"></script>
 		<script src='{% static 'geolocation-marker.js' %}'></script>
-
-		<style type="text/css" >
-			html, body {
-				margin: 0px;
-				padding: 0px;
-				height: 100%;
-			}
-					/* Always set the map height explicitly to define the size of the div
-				* element that contains the map. */
-			div.res_box {
-				width: 380px;
-				height:100px;
-				border: 1px solid rgb(206, 204, 204);
-				box-shadow: 1px 1px rgb(219, 219, 219);
-			}
-			div.res_box:hover {
-				background-color: rgb(214, 214, 214);
-			}
-			div.task_box{
-				float:left;
-				width:50%;
-				display: block;
-			}
-			div.resta_holder{
-				overflow: scroll;
-				height: 300px;
-				width: 400px;
-				border: 1px solid rgba(245, 245, 245, 0.911);
-				box-shadow: 1px 2px whitesmoke;
-			}
-		</style>
-	</head>
-
-	<body>
-		<script async defer src="https://apis.google.com/js/api.js"
-				onload="this.onload=function(){};handleClientLoad()"
-				onreadystatechange="if (this.readyState === 'complete') this.onload()">
-	   </script>
-	
-		<!-- The Navbar -->
-		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-			<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="index">HOME</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="schedule">SCHEDULE</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="edittask">EDIT</a>
-					</li>
-				</ul>
-			</div>
-			<div class="mx-auto order-0">
-				<a class="navbar-brand mx-auto" href="#">Easy Planner</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-			</div>
-			<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
-					</li>
-				</ul>
-			</div>
-		</nav>
-
-		<script>
-			function signOut() {
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-					console.log('User signed out.');
-				});
-				auth2.disconnect();
-            }
-		</script>
-		<!-- End Of Navbar -->
-	<a class="weatherwidget-io" href="https://forecast7.com/en/n33d87151d21/sydney/" data-label_1="SYDNEY" data-label_2="WEATHER" data-theme="retro-sky" >SYDNEY WEATHER</a>
-	<script>
-	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-	</script>
-	<div class="task_box" style="display:inline;float:left;width:45%;">
-			<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
-			<div id="restaurant_box" style="display: none" >
-				<div id="re_map" style="height:150px; width: 400px;"></div>
-				<div id="restaurants" class="resta_holder" > </div>
-			</div>
-			<pre id="content"></pre>
-		</div>
-
-		<div style="border-left:1px #c8c8c8 solid;background-color:#90D9F9;display:inline;float:right;width:50%;">
-
-		<iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
-				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
-		</div>
 		<script type="text/javascript">
 			// Client ID and API key from the Developer Console
 			var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
@@ -123,7 +26,7 @@
 
 			// Authorization scopes required by the API; multiple scopes can be
 			// included, separated by spaces.
-			var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+			var SCOPES = "https://www.googleapis.com/auth/calendar";
 
 			var map, currentloc;
 			var currEvent;
@@ -314,7 +217,6 @@
 				}
 			}
 
-			var map2;
 			function initMap2() {
 				// Try HTML5 geolocation.
 				var pos;
@@ -324,9 +226,15 @@
 						console.log(pos);
 						console.log(currEvent);
 						var mapframe = document.getElementById("destinationMap");
-						var placeCode = currEvent.location.replace(/ /g, "+");
-						mapframe.src = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg"+" &origin=" + pos +" &destination=" + placeCode;
-						console.log(mapframe.src);
+						if(currEvent.location){
+							var placeCode = currEvent.location.replace(/ /g, "+");
+							mapframe.src = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg"+" &origin=" + pos +" &destination=" + placeCode;
+							console.log(mapframe.src);
+						}
+						else{//if there is no destination, show current location
+							mapframe.src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg"+" &q=" + pos;
+						}
+						
 					}, function() {
 						handleLocationError(true, currentloc, map.getCenter());
 					});
@@ -376,5 +284,102 @@
 				currentloc.open(map);
 			}
 		</script>
+		<style type="text/css" >
+			html, body {
+				margin: 0px;
+				padding: 0px;
+				height: 100%;
+			}
+					/* Always set the map height explicitly to define the size of the div
+				* element that contains the map. */
+			div.res_box {
+				width: 380px;
+				height:100px;
+				border: 1px solid rgb(206, 204, 204);
+				box-shadow: 1px 1px rgb(219, 219, 219);
+			}
+			div.res_box:hover {
+				background-color: rgb(214, 214, 214);
+			}
+			div.task_box{
+				float:left;
+				width:50%;
+				display: block;
+			}
+			div.resta_holder{
+				overflow: scroll;
+				height: 300px;
+				width: 400px;
+				border: 1px solid rgba(245, 245, 245, 0.911);
+				box-shadow: 1px 2px whitesmoke;
+			}
+		</style>
+	</head>
+
+	<body>
+		<script async defer src="https://apis.google.com/js/api.js"
+				onload="this.onload=function(){};handleClientLoad()"
+				onreadystatechange="if (this.readyState === 'complete') this.onload()">
+	   </script>
+	
+		<!-- The Navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="index">HOME</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="schedule">SCHEDULE</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="edittask">EDIT</a>
+					</li>
+				</ul>
+			</div>
+			<div class="mx-auto order-0">
+				<a class="navbar-brand mx-auto" href="#">Easy Planner</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<script>
+			function signOut() {
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+					console.log('User signed out.');
+				});
+				auth2.disconnect();
+            }
+		</script>
+		<!-- End Of Navbar -->
+	<a class="weatherwidget-io" href="https://forecast7.com/en/n33d87151d21/sydney/" data-label_1="SYDNEY" data-label_2="WEATHER" data-theme="retro-sky" >SYDNEY WEATHER</a>
+	<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+	</script>
+	<div class="task_box" style="display:inline;float:left;width:45%;">
+			<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
+			<div id="restaurant_box" style="display: none" >
+				<div id="re_map" style="height:150px; width: 400px;"></div>
+				<div id="restaurants" class="resta_holder" > </div>
+			</div>
+			<pre id="content"></pre>
+		</div>
+
+		<div style="border-left:1px #c8c8c8 solid;background-color:#90D9F9;display:inline;float:right;width:50%;">
+
+		<iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
+				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
+		</div>
+		
 	</body>
 </html>
