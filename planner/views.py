@@ -43,3 +43,7 @@ def schedule(request):
 
 def index(request):
     return render(request, 'index.html')
+
+def welcome(request):
+    context = {}
+    return render(request, 'welcome.html', context)
