@@ -89,6 +89,7 @@
 
         <p><input type="text" style="width: 300px;" id="pickup-address"></p>
         <p><input type="text" style="width: 300px;" id="destination"></p>
+        <a href="{% url 'schedule' %}"><button id="cancel_request" >Cancel</button></a>
         <a href="{% url 'request_uber' %}"><button id="requestUber" onClick="codeAddress();codeAddress2();">Request a Uber</button></a>
 
     </header>
