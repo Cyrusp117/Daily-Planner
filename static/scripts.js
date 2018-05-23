@@ -345,31 +345,3 @@ function initAutocomplete(){
     });
 }
 // End Of Edit Task Functions
-
-// The Movie Functions
-function checkMovieOption() {           // Displays "Choose Movie" button when movie option selected
-    var taskfrm = document.forms["taskform"];  
-    var option = taskfrm.type.value;
-    if (option == "movie") taskfrm.movieBtn.style.visibility = 'visible';
-    else taskfrm.movieBtn.style.visibility = 'hidden';
-}
-function displayMovieModal() {          // Display the movie modal box
-    var modal = document.getElementById("movieModal");
-    modal.style.display = "block";
-}
-function closeMovieModal() {            // Close the movie modal box
-    var modal = document.getElementById("movieModal");
-    modal.style.display = "none";
-}
-function removeOptions(selectbox) {     // Clear a drop-down list
-    for (var i = selectbox.options.length - 1; i >= 0; i--) {
-        selectbox.remove(i);
-    }
-}
-function findCinemas() {
-
-}
-function submitMovieInfo() {
-    closeMovieModal();
-}
-// End Of Movie Functions

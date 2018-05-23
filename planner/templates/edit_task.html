@@ -49,39 +49,19 @@
             To: <input type="date" name="t_date">
             <input type="time"  name="t_time">
             <br>
-            <label for="Allday">all day</label>
+            <label for="Allday">All Day:</label>
             <input type="checkbox" name="all_day" onclick="checkallday()">
             <label for="EventType">EventType</label>
             <select name="type" id="type" onChange="checkMovieOption();">
-                <option value="others">others</option>
-                <option value="mealtime">mealtime</option>
-                <option value="movie">movie</option>
+                <option value="others">Others</option>
+                <option value="mealtime">Mealtime</option>
             </select>
             <input type="text" name="destination" placeholder="Enter destination of task">
             <input type="textfield" name="description" placeholder="Enter description of task">
             <button type="button" name="cancelBtn" onclick="backToSchedule()">Cancel</button>
             <br>
-            <button type="button" name="movieBtn" style="visibility:hidden;" onclick="displayMovieModal();">Choose Movie</button>
         </form>
         <!-- End Of Edit Task Menu -->
-
-        <!-- The Movie Modal -->
-        <div class="modal" id="movieModal">
-            <div class="modal-content">
-                <span class="close" onclick="closeMovieModal();">&times;</span>
-                <label for="searchBox">Search Movie:</label> <br>
-                <input type="text" id="searchBox" name="searchBox" placeholder="Enter movie title">
-                <input type="button" name="searchBtn" value="Search" onclick="findCinemas();"> <br><br>
-                <label for="cinemas">Cinemas:</label>
-                <label for="showtimes">Showtimes:</label><br>
-                <select name="cinemas">
-                </select>
-                <select name="showtimes">
-                </select><br><br>
-                <input type="button" name="completeBtn" value="Complete" onclick="submitMovieInfo();">
-            </div>
-        </div>
-        <!-- End Of Movie Modal -->
 
         <script async defer src="https://apis.google.com/js/api.js"
                 onload="this.onload=function(){};handleClientLoad()"
