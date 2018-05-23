@@ -11,11 +11,10 @@
 <script src='{% static 'fullcalendar.js' %}'></script>
 <script src='{% static 'moment-timezone-with-data.js' %}'></script>
 <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
-<link href='{% static 'css/bootstrap.css' %}' rel='stylesheet'/>
-<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 <script src="https://apis.google.com/js/api.js"></script>
 <script src='{% static 'connectGoogle.js' %}'></script>
 
@@ -23,28 +22,27 @@
   /* The Modal (background) */
   .modal {
       display: none;
-      position: fixed;
+      position: fixed; /* Stay in place */
       z-index: 10; /* Sit on top */
       padding-top: 100px; /* Location of the box */
       left: 0;
       top: 0;
-      
       width: 100%; /* Full width */
       height: 100%; /* Full height */
       overflow: auto; /* Enable scroll if needed */
       background-color: rgb(0,0,0); /* Fallback color */
       background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
-
+  
   /* Modal Content */
   .modal-content {
-      width: 30%; /* Full width */
       background-color: #fefefe;
       margin: auto;
       padding: 20px;
       border: 1px solid #888;
+      width: 80%;
   }
-
+  
   /* The Close Button */
   .close {
       color: #aaaaaa;
@@ -52,7 +50,7 @@
       font-size: 28px;
       font-weight: bold;
   }
-
+  
   .close:hover,
   .close:focus {
       color: #000;
@@ -82,6 +80,8 @@
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
+  <button onclick="handleSignInClick()" id="signin-button">Sign In</button>
+  <button onclick="handleSignOutClick()" id="signout-button">Sign Out</button>
   <!-- <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button> -->
   <pre id="content"></pre>
 
@@ -90,14 +90,13 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-    <i class="far fa-trash-alt" style="float: right"></i>
-    <div class="form-group">
-    <input id="eventTitle" class="form-control" placeholder="Enter Titile" type="text" name = "Title" >
-    </div>
-    <input type="button" class="btn btn-primary" style="width: 50%;"  id="Save" value="Save" >
-    <input type="button" class="btn btn-secondary" style="width: 50%;" id="Cancel" value="Cancel" >
-    <input type="button" class="btn btn-danger"  id="Delete" value="Delete" >
+    <p>Event is</p>
+    <input id="eventTitle" type="text" name = "Title" >
+    <input type="button" id="Save" value="Save" >
+    <input type="button" id="Cancel" value="Cancel" >
+    <input type="button" id="Delete" value="Delete" >
     <input type="button" id="Map" value="Map" >
+    <a href="{% url 'uber' %}"><button>Request an Uber</button></a>
     <a href="edittask">More Options</a>
   </div>
 </div>
@@ -106,8 +105,8 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-  <iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
-src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe>
+  <iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0" 
+src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe> 
   </div>
 </div>
   <div id='calendar'></div>
