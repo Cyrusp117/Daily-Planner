@@ -1,27 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% load static %}
-    <!--insert google sign in-->
-<meta charset='utf-8' />
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/api.js"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+ {% load static %}
+     <!--insert google sign in-->
+     <meta charset='utf-8' />
+     <script src="https://apis.google.com/js/api.js"></script>
+     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+     <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+       <!-- Custom styles for this template -->
+    <link href="welcome.css" rel="stylesheet">
+
 <style>
 h1 {
    text-align: center;
    font-family: "Verdana"; 
    font-size: 80px;  
-   color: grey;
+   color: 	 #004280;
 }
 h2 {
    text-align: center;
    font-family: "Verdana";
    font-size: 40px;
    font-weight: normal; 
-   color: grey;
+   color: #004280;
 }
 p {
    text-align: center;
@@ -32,6 +38,7 @@ body {
    border-top: 100px solid midnightblue;
    border-left: 100px solid midnightblue;
 }
+
 </style>
 <!--title for the tab-->
 <title>Welcome!</title>
@@ -44,39 +51,105 @@ body {
 <h2>Welcome!</h2> 
 <p>Start planning your day. Sign in using your Google Account.</p>
 
-<br>
-<br>
-<div id="my-signin2"></div>
-<a href="#" onclick="signOut()">Sign out</a>
-</form>
-<script>
-function onSuccess(googleUser) {
-console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-}
-function onFailure(error) {
-console.log(error);
-}
-function renderButton() {
-gapi.signin2.render('my-signin2', {
-  'scope': 'profile email',
-  'width': 350,
-  'height': 70,
-  'longtitle': true,
-  'theme': 'dark',
-  'onsuccess': onSuccess,
-  'onfailure': onFailure
-});
-}
-function signOut() {
-var auth2 = gapi.auth2.getAuthInstance();
-auth2.signOut().then(function () {
-  console.log('User signed out.');
-});
-auth2.disconnect();
-}
-</script>
 
-<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+     <!-- Marketing messaging and featurettes
+      ================================================== -->
+      <!-- Wrap the rest of the page in another container to center all the content. -->
+
+      <div class="container marketing">
+
+        <!-- Three columns of text below the sign in -->
+        <div class="row">
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/216/216275.svg" alt="Generic placeholder image" width="140" height="140">
+            <h2>Easy to Use</h2>
+            <p>Plan your day effortlessly with Easy Planner.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://www.androidpolice.com/wp-content/uploads/2016/09/nexus2cee_circular_base.png" alt="Generic placeholder image" width="140" height="140">
+            <h2>Google Calendar</h2>
+            <p>Integrate with your Google Account.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://developer.apple.com/watchos/human-interface-guidelines/images/icon-and-image-large-icon-weather_2x.png" alt="Generic placeholder image" width="140" height="140">
+            <h2>Weather</h2> 
+            <!--https://upload.wikimedia.org/wikipedia/commons/b/bf/Circle-icons-weather.svg-->
+            <p>Know the weather outside to plan your day.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="http://www.proaimsresources.com/wp-content/uploads/Google-map.png" alt="Generic placeholder image" width="140" height="140">
+            <h2>Map</h2>
+            <p>Know the route to your destination</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/215/215824.svg" alt="Generic placeholder image" width="140" height="140">
+            <h2>Meal Time</h2>
+            <p>Choose from a list of restaurants, based on location to dine at.</p>
+            
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <img class="rounded-circle" src="https://pbs.twimg.com/profile_images/906098350235283456/Oyf51gU0_400x400.jpg" alt="Generic placeholder image" width="140" height="140">
+            <h2>Uber</h2>
+            <p>Book an Uber to reach your destination</p>
+          </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+      </div><!-- marketing container -->        
+
+          <div id="my-signin2" onclick="checksignin()"></div>
+          <a href="#" onclick="signOut()">Sign out</a>
+          <script>
+            var changepage = 0;
+            function checksignin(){
+              changepage++;
+              renderButton();
+            }
+            function onSuccess(googleUser) {
+              console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+              if(changepage){
+                window.location.assign("index");
+              }
+            }
+            function onFailure(error) {
+              console.log(error);
+            }
+            function renderButton() {
+              gapi.signin2.render('my-signin2', {
+                'scope': 'profile email',
+                'width': 240,
+                'height': 50,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': onSuccess,
+                'onfailure': onFailure
+              });
+            }
+            function signOut() {
+              var auth2 = gapi.auth2.getAuthInstance();
+              auth2.signOut().then(function () {
+                console.log('User signed out.');
+              });
+              auth2.disconnect();
+            }
+          </script>
+        
+          <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   </body>
 </html>
