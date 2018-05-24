@@ -68,5 +68,7 @@ form select {
 }
 
 .edittask {
-  margin: 10px 5%;
+  position: absolute;
+  top: 20%;
+  margin: 10px 5% ;
 }
