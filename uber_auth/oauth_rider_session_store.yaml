@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 access_token: KA.eyJ2ZXJzaW9uIjoyLCJpZCI6IldIakNuOVh5UXFPdTU2SG1WNEozTEE9PSIsImV4cGlyZXNfYXQiOjE1Mjk3MjYzMDIsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.75uyacwa1t0egQNNedaZT3z2GR8YbfTJ3KGQc_Kj9Ac
 client_id: 4p2Wkw_5lBhro2ZM2kIrdtAHTc6Mez7i
 client_secret: oVyX_jMcNtHKUkjyOAp_fCDsnfpUoM5wt2lsdsrO
@@ -12,3 +13,16 @@ scopes:
 - ride_widgets
 - profile
 - all_trips
+=======
+access_token: KA.eyJ2ZXJzaW9uIjoyLCJpZCI6IkJPbHhKUGhPUTNLNU9GRDNFbVQ1eXc9PSIsImV4cGlyZXNfYXQiOjE1Mjk2MzI2NjEsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.U3CaSky9YlMyJD8Dk-oWeuUhX0iX3Jjz41giy0RZ_bA
+client_id: 4p2Wkw_5lBhro2ZM2kIrdtAHTc6Mez7i
+client_secret: oVyX_jMcNtHKUkjyOAp_fCDsnfpUoM5wt2lsdsrO
+expires_in_seconds: 1529632661
+grant_type: authorization_code
+redirect_url: http://localhost:8000/uber_auth/uber/connect
+refresh_token: MA.CAESEGNVMpKAyUxzk1mX7G5GRdYiATEoATIBMQ.BS8kKtgBYBPIP4xllW8FJUT-MQMVr0PkOl7bIfBcOrk.T0Vymg5SR2GjMDkKBh33Tpp5b4tunfF0zI9DZkTttV4
+scopes:
+- profile
+- history
+- ride_widgets
+>>>>>>> a09f32037cf3ee69a16c19be433ac85f20d5a8f7
