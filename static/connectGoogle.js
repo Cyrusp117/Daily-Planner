@@ -132,7 +132,7 @@ $(document).ready(function () {
       var mapModel = document.getElementById('mapModel');
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-      var span2 = document.getElementsByClassName("close")[1];
+      var span2 = document.getElementsByClassName("close")[2];
       var title = document.getElementById("eventTitle");
       var save = document.getElementById("Save");
       var cancel = document.getElementById("Cancel");

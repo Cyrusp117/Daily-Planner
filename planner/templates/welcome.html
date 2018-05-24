@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        
+        <title>Welcome to Easy Planner</title>
         <!-- Custom styles for this template -->
         <link href="welcome.css" rel="stylesheet">
 
@@ -34,10 +34,7 @@
                 font-family: "Verdana"; 
                 color: grey;
             }
-            body {
-                border-top: 100px solid midnightblue;
-                border-left: 100px solid midnightblue;
-            }
+
         </style>
         <!--title for the tab-->
         <title>Welcome!</title>
@@ -56,7 +53,10 @@
         <!-- Wrap the rest of the page in another container to center all the content. -->
 
         <div class="container marketing">
-
+            <div  align="center">
+                <div id="my-signin2" onclick="checksignin()"></div>
+                <a href="#" onclick="signOut()">Sign out</a>
+            </div>
             <!-- Three columns of text below the sign in -->
             <div class="row">
             <div class="col-lg-4">
@@ -98,8 +98,7 @@
             </div><!-- /.row -->
         </div><!-- marketing container -->        
 
-        <div id="my-signin2" onclick="checksignin()"></div>
-        <a href="#" onclick="signOut()">Sign out</a>
+
         <script>
             // Client ID and API key from the Developer Console
             var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';

@@ -12,11 +12,14 @@
         <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
         <link href='{% static 'styles.css' %}' rel='stylesheet'/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
         <script src="https://apis.google.com/js/api.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src='{% static 'connectGoogle.js' %}'></script>
+        <title>Schedule</title>
     </head>
 
     <body>
@@ -65,24 +68,22 @@
 
         <!-- <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button> -->
         <pre id="content"></pre>
-
         <!-- The Modal -->
         <div id="myModal" class="modal">
             <!-- Modal content -->
-            <div class="modal-content">
-            <div class="form-group" style="display: inline">
-            <span class="close">&times;</span>
-            &ensp;
-             <span id="Delete" class="close" style="float: left"><i class="fa fa-trash" aria-hidden="true"></i></span>
-            </div>
-            <div class="form-group">
-            <input id="eventTitle" class="form-control" placeholder="Enter Titile" type="text" name = "Title" >
-            </div>
-            <input type="button" class="btn btn-primary" style="width: 50%;"  id="Save" value="Save" >
-            <input type="button" class="btn btn-secondary" style="width: 50%;" id="Cancel" value="Cancel" >
-            <input type="button" class="btn btn-danger"  id="Delete" value="Delete" >
-            <input type="button" id="Map" value="Map" >
-            <a href="edittask">More Options</a>
+            <div class="modal-content" style="width: 50%">
+                <div class="form-group" style="display: inline">
+                    <span class="close" id="Cancel" >&times;</span>
+                    <input  type="image" value="map" id="Map" class="material-icons" style="font-size:30px; float: right">
+                    <span id="Delete" class="close" style="float: left"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                </div>
+                <div class="form-group">
+                    <input id="eventTitle" class="form-control" placeholder="Enter Titile" type="text" name = "Title" >
+                </div>
+                <div  style="display: inline;">
+                    <input type="button" class="btn btn-primary" style="width: 30%;"  id="Save" value="Save" >
+                    <a href="edittask" style="top: 80px">More Options</a>
+                </div>
             </div>
         </div>
 
@@ -102,5 +103,6 @@
             </div>
             <div id='calendar'></div>
         </div>
+        
     </body>
 </html>

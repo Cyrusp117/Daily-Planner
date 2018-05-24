@@ -18,6 +18,7 @@
         <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
         <script src="https://apis.google.com/js/api.js"></script>
         <script src='{% static 'connectGoogle.js' %}'></script>
+        <title>Edit Task</title>
         <style>
             body {
                 background-image: url("http://ikconinfotech.com/blog/wp-content/uploads/2018/03/web-designer-pune-background.jpg");
@@ -208,6 +209,7 @@
             localevent.destination = taskfrm.destination.value; // formatted address for gCal
             localevent.description = taskfrm.description.value;
             localevent.title = taskfrm.taskTitle.value;
+            localevent.type = taskfrm.type.value;
             if (taskfrm.all_day.checked) {
                 eventToSave = {
                     'summary': localevent.title,
