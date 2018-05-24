@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% load static %}
+        <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
+        <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+        <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+        <link href='{% static 'css/bootstrap.css' %}' rel='stylesheet'/>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script src='{% static 'lib/moment.min.js' %}'></script>
+        <script src='{% static 'lib/jquery.min.js' %}'></script>
+        <script src='{% static 'fullcalendar.js' %}'></script>
+        <script src='{% static 'moment-timezone-with-data.js' %}'></script>
+        <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
+
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script src='{% static 'connectGoogle.js' %}'></script>
+        <style>
+            body {
+                background-image: url("http://ikconinfotech.com/blog/wp-content/uploads/2018/03/web-designer-pune-background.jpg");
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+
+    <script>
+        function handleClientLoad() {
+            // Loads the client library and the auth2 library together for efficiency.
+            // Loading the auth2 library is optional here since `gapi.client.init` function will load
+            // it if not already loaded. Loading it upfront can save one network request.
+            gapi.load('client:auth2', Initialize);
+        }
+        function Initialize() {
+            // 2. Initialize the JavaScript client library.
+            gapi.client.init({
+            'apiKey': API_KEY,
+            // Your API key will be automatically added to the Discovery Document URLs.
+            'discoveryDocs': DISCOVERY_DOCS,
+            // clientId and scope are optional if auth is not required.
+            'clientId': CLIENT_ID,
+            'scope': SCOPES,
+            }).then(function () {
+                autofillform();
+            });
+        };
+        function autofillform(){//auto fill the taskform
+            var taskfrm = document.forms["taskform"];
+            var isExist = sessionStorage.getItem("eventexist");
+            if(isExist === 'true'){//if event already exist, autofill the taskform
+                console.log(isExist);
+                var eventId = sessionStorage.getItem("GeventId");
+                getGevent(eventId,function(Gevent){
+                    console.log('huzzah, I\'m done!');
+                    taskfrm.taskTitle.value = Gevent.summary;
+                    if(Gevent.start.date){//if it's all day event
+                        taskfrm.all_day.checked = true;
+                        alldaydisplay();
+                        taskfrm.f_date.value = Gevent.start.date;
+                        taskfrm.t_date.value = Gevent.end.date;
+                    }
+                    else{
+                        taskfrm.all_day.checked = false;
+                        var startTime = Gevent.start.dateTime;
+                        var endTime = Gevent.end.dateTime;
+                        alldaydisplay();
+                        sliceTime(taskfrm, startTime, endTime);
+                    }
+                    if(Gevent.location){
+                        taskfrm.destination.value = Gevent.location;
+                    }
+                    if(Gevent.description){
+                        taskfrm.description.value = Gevent.description;
+                    }
+                    if(Gevent.extendedProperties){
+                        taskfrm.type.value = Gevent.extendedProperties.private.type;
+                    }
+                });
+            }
+            else{//when inserting new event to calendar
+                if(sessionStorage.getItem("eventAllDay") === 'true'){
+                    //if it's all  day event
+                    taskfrm.all_day.checked = true;
+                    alldaydisplay();
+                    taskfrm.f_date.value = sessionStorage.getItem("eventStart");
+                    taskfrm.t_date.value = sessionStorage.getItem("eventEnd");
+                }
+                else{
+                    taskfrm.all_day.checked = false;
+                    alldaydisplay();
+                    var startTime = sessionStorage.getItem("eventStart");
+                    var endTime = sessionStorage.getItem("eventEnd");
+                    taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
+                    taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T")) ;
+                    taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
+                    taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T")) ;
+                }
+            }
+        }
+        function alldaydisplay(){
+            var taskfrm = document.forms["taskform"];
+            if(taskfrm.all_day.checked){
+                taskfrm.t_time.style.display = "none";
+                taskfrm.f_time.style.display = "none";
+            }
+            else{
+                taskfrm.t_time.style.display = "inline";
+                taskfrm.f_time.style.display = "inline";
+            }
+        }
+        function checkallday(){
+            var taskfrm = document.forms["taskform"];
+            alldaydisplay();
+            taskfrm.f_time.value = moment().format("hh:mm:ss");
+            taskfrm.t_time.value = moment().add(1,'hour').format("hh:mm:ss");
+        }
+        function getGevent(eventId,_callback){
+            var request = gapi.client.calendar.events.get({
+                'calendarId': 'primary',
+                'eventId':eventId,
+            });
+            request.execute(function(response) {
+                if (!response) {
+                    console.log('error getting event');
+                    console.log(response);
+                } else {
+                    console.log('event got');
+                    console.log(response);
+                    _callback(response);
+                }
+            });
+
+        }
+        function sliceTime(taskfrm, startTime, endTime){
+            taskfrm.f_date.value = startTime.slice(0,startTime.indexOf("T")) ;
+            taskfrm.f_time.value = startTime.slice(1+startTime.indexOf("T"),startTime.indexOf("+")) ;
+            taskfrm.t_date.value = endTime.slice(0,endTime.indexOf("T")) ;
+            taskfrm.t_time.value = endTime.slice(1+endTime.indexOf("T"),endTime.indexOf("+")) ;
+        }
+        function formatTime(taskfrm){//check if the date and time in taskform is in correct format and make it a moment object
+            if(!taskfrm.all_day.checked){//if it's all day event, don't need to check
+                var f_datetime = moment.tz(taskfrm.f_date.value +" "+ taskfrm.f_time.value,moment.tz.guess());
+                var t_datetime = moment.tz(taskfrm.t_date.value +" "+ taskfrm.t_time.value, moment.tz.guess());
+                if(!t_datetime._isValid || !f_datetime._isValid){
+                    alert("Invalid time format, correct format is hours:minutes");
+                }
+                if(!f_datetime._isValid){
+                    f_datetime = moment();
+                }
+                if(!t_datetime._isValid){
+                    t_datetime = moment().add(1,'hour');
+                }
+                taskfrm.f_datetime = f_datetime.format();
+                taskfrm.t_datetime = t_datetime.format();
+                sliceTime(taskfrm, taskfrm.f_datetime, taskfrm.t_datetime);
+            }
+        }
+        function saveTask(){
+            var taskfrm = document.forms["taskform"];
+            formatTime(taskfrm);
+            if(!taskfrm.taskTitle.value){
+                taskfrm.taskTitle.value = "No title";
+            }
+            if(sessionStorage.getItem("eventexist")){
+                updateTask(taskfrm);
+            }
+            else{
+                insertTask(taskfrm);
+            }
+            backToSchedule();
+        }
+        function deleteTask(taskfrm){
+            if(sessionStorage.getItem('eventexist')){//if the event do exist
+                var eventId = sessionStorage.getItem('GeventId');
+                var request = gapi.client.calendar.events.delete({
+                    'calendarId': 'primary',
+                    'eventId': eventId
+                });
+                request.execute(function(response) {
+                    if (!response) {
+                        console.log('event delete threw error');
+                        console.log(response);
+                    } else {
+                        console.log('event deleted');
+                        $('#calendar').fullCalendar('removeEvents', eventId);
+                    }
+                });
+            }
+            else{//else only delete the local event.
+                $('#calendar').fullCalendar('removeEvents', eventId);
+            }
+            backToSchedule();
+        }
+        function backToSchedule(){
+            sessionStorage.removeItem('GeventId');
+            sessionStorage.removeItem('localEvent');
+            sessionStorage.removeItem('eventexist');
+            window.location.replace("schedule");
+        }
+        function insertTask(taskfrm){
+            var desc;
+            var location;
+            var eventToSave = {};
+            var localevent = new Object();
+            localevent.destination = taskfrm.destination.value; // formatted address for gCal
+            localevent.description = taskfrm.description.value;
+            localevent.title = taskfrm.taskTitle.value;
+            if (taskfrm.all_day.checked) {
+                eventToSave = {
+                    'summary': localevent.title,
+                    'location': localevent.destination,
+                    'description': localevent.description,
+                    'start': {
+                        'date': taskfrm.f_date.value
+                    },
+                    'end': {
+                        'date': taskfrm.t_date.value
+                    },
+                    "extendedProperties": {
+                        "private": {
+                        "type": localevent.type
+                        }
+                    }
+                };
+                localevent.start = taskfrm.f_date.value;
+                localevent.end = taskfrm.t_date.value;
+            } else {
+                var f_dateTime = taskfrm.f_datetime;
+                var t_dateTime = taskfrm.t_datetime;
+                eventToSave = {
+                    'summary': localevent.title,
+                    'location': localevent.destination,
+                    'description': localevent.description,
+                    'start': {
+                        'dateTime': f_dateTime
+                    },
+                    'end': {
+                        'dateTime': t_dateTime
+                    },
+                    "extendedProperties": {
+                        "private": {
+                        "type": localevent.type
+                        }
+                    }
+                };
+                localevent.start = f_dateTime;
+                localevent.end = t_dateTime;
+            }
+            console.log(eventToSave);
+            console.log(localevent);
+            var request = gapi.client.calendar.events.insert({
+                'calendarId': 'primary',
+                'resource': eventToSave
+            });
+            request.execute(function(response) {
+                if (!response) {
+                    console.log('error adding event');
+                    console.log(response);
+                } else {
+                    console.log('event added');
+                    console.log(response);
+                    $('#calendar').fullCalendar('addEvent', localevent); // stick? = true
+                }
+            });
+        }
+        function updateTask(taskfrm){
+            var desc;
+            var location;
+            var eventToSave = {};
+            var localevent = new Object();
+            localevent.destination = taskfrm.destination.value; // formatted address for gCal
+            localevent.description = taskfrm.description.value;
+            localevent.title = taskfrm.taskTitle.value;
+            localevent.id = sessionStorage.getItem("GeventId");//get original event id
+            localevent.type = taskfrm.type.value;
+            if (taskfrm.all_day.checked) {
+                eventToSave = {
+                    'summary': localevent.title,
+                    'location': localevent.destination,
+                    'description': localevent.description,
+                    'start': {
+                        'date': taskfrm.f_date.value
+                    },
+                    'end': {
+                        'date': taskfrm.t_date.value
+                    },
+                    "extendedProperties": {
+                        "private": {
+                        "type": localevent.type
+                        }
+                    }
+
+                };
+                localevent.start = taskfrm.f_date.value;
+                localevent.end = taskfrm.t_date.value;
+            } else {
+                var f_dateTime = taskfrm.f_datetime;
+                var t_dateTime = taskfrm.t_datetime;
+                eventToSave = {
+                    'summary': localevent.title,
+                    'location': localevent.destination,
+                    'description': localevent.description,
+                    'start': {
+                        'dateTime': f_dateTime
+                    },
+                    'end': {
+                        'dateTime': t_dateTime
+                    },
+                    "extendedProperties": {
+                        "private": {
+                        "type": localevent.type
+                        }
+                    }
+
+                };
+                localevent.start = f_dateTime;
+                localevent.end = t_dateTime;
+            }
+            console.log(eventToSave);
+            console.log(localevent);
+            var request = gapi.client.calendar.events.update({
+                'calendarId': 'primary',
+                'eventId': localevent.id,
+                'resource': eventToSave
+            });
+            request.execute(function(response) {
+                if (!response) {
+                    console.log('error updating event');
+                    console.log(response);
+                } else {
+                    console.log('event updated');
+                    console.log(response);
+                    $('#calendar').fullCalendar('updateEvent', localevent); // stick? = true
+                }
+            });
+        }
+    </script>
+
+    <body>
+        <!-- The Navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark" style="height:50px;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                       <a class="nav-link" href="{% url 'schedule' %}">SCHEDULE</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'edittask' %}">EDIT</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="mx-auto" href="#">
+                    <img src="{% static "BWLogo2.png" %}">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <script>
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth2.disconnect();
+            }
+        </script>
+        <!-- End Of Navbar -->
+
+        <script async defer src="https://apis.google.com/js/api.js"
+                onload="this.onload=function(){};handleClientLoad()"
+                onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
+
+        <div class="edittask">
+            <!--<p>{{taskTitle}} </p>-->
+            <form id="taskform" method="POST">
+                <i name="cancelBtn" style="cursor:pointer;font-size:20px;margin:0px 5px;" onclick="backToSchedule()" class="fas fa-times"></i>
+                {% csrf_token %}
+                <input class="form-control" style="width:200px;display:inline;" type="text" name="taskTitle" placeholder="Enter title of task">
+                <input type="button" class="btn btn-primary" name="saveBtn" value="Save" onclick="saveTask()">
+                <input type="button" class="btn" name="delBtn" value="Delete" onclick="deleteTask()"><br>
+                <!--<input type="button" name="cancelBtn" value="Cancel" onclick="backToSchedule()">-->
+                <input class="form-control" style="width:150px;display:inline;" type="date" name="f_date" >
+                <input class="form-control" style="width:100px;display:inline;" type="time" name="f_time" ></label>
+                <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
+                <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
+                <div style="display:inline-block;margin-left:0px;padding-left:0px;">
+                    <input class="form-control" style="width:150px;display:inline;" type="date" name="t_date">
+                    <input class="form-control" style="width:100px;display:inline;" type="time"  name="t_time">
+                </div><br>
+                <div style="margin-top:5px;"></div>
+                <label for="Allday">All Day:
+                    <input style="vertical-align:middle;" type="checkbox" name="all_day" onclick="checkallday()">
+                </label><br>
+                <label for="EventType">Event Type:</label>
+                <select class="form-control" style="width:150px;display:inline;" id="type">
+                    <option value="others">Other</option>
+                    <option value="mealtime">Mealtime</option>
+                </select><br><br>
+                <div style="border-top:1px solid #c8c8c8;"></div><br>
+                <input class="form-control" style="width:200px;" type="text" name="destination" placeholder="Enter destination of task">
+                <textarea class="form-control" style="width:400px;" type="text" name="description" placeholder="Enter description of task" cols="40" rows="3"></textarea>
+            </form>
+        </div>
+    </body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places&callback=initAutocomplete" async defer></script>
+
+    <script>
+        function initAutocomplete(){
+            var placeInput = document.getElementsByName("destination");
+            console.log(placeInput[0]);
+            var autocomplete = new google.maps.places.Autocomplete(placeInput[0]);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+                console.log(address);
+            });
+        }
+    </script>
+</html>

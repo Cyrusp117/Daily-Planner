@@ -1,0 +1,14 @@
+access_token: KA.eyJ2ZXJzaW9uIjoyLCJpZCI6IlJRL2Z4OHhkUU1TcVJRZ3BqaHMwM1E9PSIsImV4cGlyZXNfYXQiOjE1Mjk3NzM2NzcsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.whFwW_T5BEy9ASkwxNxm8p9IW6w9tTV0JOQR6bDnJYc
+client_id: 4p2Wkw_5lBhro2ZM2kIrdtAHTc6Mez7i
+client_secret: oVyX_jMcNtHKUkjyOAp_fCDsnfpUoM5wt2lsdsrO
+expires_in_seconds: 1529773677
+grant_type: authorization_code
+redirect_url: http://localhost:8000/uber_auth/uber/connect
+refresh_token: MA.CAESEBxn5EtPQUMFk882zyIHEWUiATEoATIBMQ.n5UPjIuIaiy3SEbHwIAYk3Sc1vdQb6jbM6CuudDV5s8.X5DlpP_XRweQgb9AC-OOmJ6syWL0yHyDkKvTMIwXJBk
+scopes:
+- profile
+- all_trips
+- request
+- places
+- ride_widgets
+- history

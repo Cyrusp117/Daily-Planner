@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        <meta charset="utf-8">
+        <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+        <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <style>
+            h2 {
+                font-family: "Verdana";
+                font-size: 40px;
+                font-weight: normal; 
+                color: #004280;
+            }
+            body {
+                background-image: url("{% static "images/uber.jpg" %}");
+            
+            }
+        </style>
+
+        <script type="text/javascript">
+        function initialize() {
+          var address = (document.getElementById('pickup-address'));
+          var autocomplete = new google.maps.places.Autocomplete(address);
+          autocomplete.setTypes(['geocode']);
+          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                return;
+            }
+
+            var address = '';
+            if (place.address_components) {
+              address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+          });
+        }
+        function initialize2() {
+          var address = (document.getElementById('destination'));
+          var autocomplete = new google.maps.places.Autocomplete(address);
+          autocomplete.setTypes(['geocode']);
+          google.maps.event.addListener(autocomplete, 'place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                return;
+            }
+
+            var address = '';
+            if (place.address_components) {
+              address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+          });
+        }
+        function codeAddress() {
+            geocoder = new google.maps.Geocoder();
+            var address = document.getElementById("pickup-address").value;
+            var dict = {}
+            geocoder.geocode( { 'address': address}, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+              //alert("Latitude: "+results[0].geometry.location.lat());
+              //alert("Longitude: "+results[0].geometry.location.lng());
+                var picklat = results[0].geometry.location.lat();
+                var picklng = results[0].geometry.location.lng();
+                //updateLatLng1(picklat,picklng);
+              }else {
+                  //alert("Geocode was not successful for the following reason: " + status);
+              }
+            });
+            var address2 = document.getElementById("destination").value;
+            geocoder.geocode( { 'address': address2}, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+              //alert("Latitude: "+results[0].geometry.location.lat());
+              //alert("Longitude: "+results[0].geometry.location.lng());
+                destlat = results[0].geometry.location.lat();
+                destlng = results[0].geometry.location.lng();
+                updateLatLng2(destlat,destlng);
+              }else {
+                  //alert("Geocode was not successful for the following reason: " + status);
+              }
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+        google.maps.event.addDomListener(window, 'load', initialize2);
+
+        function updateLatLng1(picklat, picklng) {
+        var data = {'picklat': picklat, 'picklng': picklng};
+        $.ajax({
+                url: "{% url 'request_uber' %}",
+                type: "POST",
+                data: {
+                    picklat: data['picklat'],
+                    picklng: data['picklng'],
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                cache: false,
+                success : function(json) {
+                    //alert("Successfully sent the URL to Django");
+                },
+                error : function(xhr,errmsg,err) {
+                    //alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                }
+            });
+    };
+    function updateLatLng2(destlat, destlng) {
+        var data = {'destlat': destlat, 'destlng': destlng};
+        $.ajax({
+                url: "{% url 'request_uber' %}",
+                type: "POST",
+                data: {
+                    destlat: data['destlat'],
+                    destlng: data['destlng'],
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                cache: false,
+                success : function(json) {
+                    //alert("Successfully sent the URL to Django");
+                },
+                error : function(xhr,errmsg,err) {
+                    //alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                }
+            });
+    };
+        </script>
+        <script>
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth2.disconnect();
+            }
+        </script>
+    </head>
+
+<body>
+
+  <!-- The Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="height:50px;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">HOME</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'schedule' %}">SCHEDULE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'edittask' %}">EDIT</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="mx-auto" href="#" style="pointer-events:none;cursor:default;">
+                    <img src="{% static "images/BWLogo2.png" %}">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'welcome' %}" onclick="signOut();">LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+  <div class="container">
+    <div class="jumbotron">
+        <form action="/action_page.php">
+
+            <div class="form-group">
+                <h2><a href="https://riders.uber.com/">
+                {{ profile.first_name }} {{ profile.last_name }}'s Dashboard
+                </a></h2>
+            </div>
+            <div class="form-group">
+                <label for="pickup-address">Pick-up Address:</label>
+                <input type="text" class="form-control" id="pickup-address" placeholder="Enter Pick-up Address" name="pickup-address">
+            </div>
+            <div class="form-group">
+                <label for="destination">Destination:</label>
+                <input type="text" class="form-control" id="destination" placeholder="Enter Destination" name="destination">
+            </div>
+            <div class="form-group">
+                <a href="{% url 'schedule' %}"> <input type="button" id="cancel_request" value="Cancel" class="btn btn-info"></a>
+                <a href="{% url 'request_uber' %}"> <input type="button" id="requestUber" onClick="codeAddress();" value="Request a Uber" class="btn btn-info"></a>
+            </div>
+        </form>
+    </div>
+    
+  </div>
+  
+</body>
+</html>
