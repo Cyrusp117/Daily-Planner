@@ -113,8 +113,10 @@
 				mainDiv.appendChild(newStrong);
 				if (next == 1)
 					mainDiv.appendChild(newDiv);
-				mainDiv.appendChild(document.createElement("br"));
 				pre.appendChild(mainDiv);
+				var hr = document.createElement("hr")
+				hr.style.clear = "both";
+				pre.appendChild(hr);
 			}
 
 			/**
@@ -415,7 +417,7 @@
 
 		<div class="task_box" style="display:inline;float:left;width:48%;margin-left:10px;">
 			<div class="my-3 p-3 bg-white rounded box-shadow">
-				<pre id="upcoming" class="my-3 p-3 bg-white rounded box-shadow" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
+				<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
 			</div>
 			<div class="my-3 p-3 bg-white rounded box-shadow">
 			<div id="restaurant_box" style="display:none" >
