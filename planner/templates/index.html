@@ -290,6 +290,15 @@
 				padding: 0px;
 				height: 100%;
 			}
+			body {
+				background-image: url("../static/images/IndexBG.jpg");
+                background-repeat:no-repeat;
+                background-position:center center;
+                -o-background-size: 100% 100%, auto;
+                -moz-background-size: 100% 100%, auto;
+                -webkit-background-size: 100% 100%, auto;
+                background-size: 100% 100%, auto;
+			}
 					/* Always set the map height explicitly to define the size of the div
 				* element that contains the map. */
 			div.res_box {
@@ -339,7 +348,7 @@
 			</div>
 			<div class="mx-auto my-2 order-0 order-md-1 position-relative">
 				<a class="mx-auto" href="#" style="pointer-events:none;cursor:default;">
-					<img src="{% static "BWLogo2.png" %}">
+					<img src="{% static "images/BWLogo2.png" %}">
 				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
 					<span class="navbar-toggler-icon"></span>
@@ -347,7 +356,7 @@
 			</div>
 			<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
+					<li class="nav-item active">
 						<a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
 					</li>
 				</ul>

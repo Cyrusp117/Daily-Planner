@@ -12,8 +12,6 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>Welcome to Easy Planner</title>
-        <!-- Custom styles for this template -->
-        <link href="welcome.css" rel="stylesheet">
 
         <style>
             h1 {
@@ -34,13 +32,22 @@
                 font-family: "Verdana"; 
                 color: grey;
             }
+            body {
+                background-image: url("../static/images/WelcomeBG.jpg");
+                background-repeat:no-repeat;
+                background-position:center center;
+                -o-background-size: 100% 100%, auto;
+                -moz-background-size: 100% 100%, auto;
+                -webkit-background-size: 100% 100%, auto;
+                background-size: 100% 100%, auto;
+            }
         </style>
         <!--title for the tab-->
         <title>Welcome!</title>
     </head>
 
     <body>
-        <img src="https://i0.wp.com/www.therny.com/wp-content/uploads/2017/06/Desk-Background-4AE.jpg?ssl=1" width=100% height=400px>
+        <img src="{% static "images/Desk.jpg" %}" width=100% height=400px>
         
         <h1><b>Easy Planner</b></h1>
 
@@ -54,7 +61,6 @@
         <div class="container marketing">
             <div  align="center">
                 <div id="my-signin2" onclick="checksignin()"></div>
-                <a href="#" onclick="signOut()">Sign out</a>
             </div>
             <!-- Three columns of text below the sign in -->
             <div class="row">
@@ -96,12 +102,6 @@
                 </div><!-- /.col-lg-4 -->
             </div><!-- /.row -->
         </div><!-- marketing container -->
-
-        <div class="container marketing">
-            <div class="h-100 row align-items-center">
-                <div class="col-lg-4 offset-lg-4" id="my-signin2" onclick="checksignin()" style="padding:0px 0px 0px 70px;"></div>
-            </div>
-        </div>
 
         <script>
             // Client ID and API key from the Developer Console
