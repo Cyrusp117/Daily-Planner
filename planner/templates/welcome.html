@@ -11,9 +11,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        
-        <!-- Custom styles for this template -->
-        <link href="welcome.css" rel="stylesheet">
 
         <style>
             h1 {
@@ -56,50 +53,56 @@
         <!-- Wrap the rest of the page in another container to center all the content. -->
 
         <div class="container marketing">
-
             <!-- Three columns of text below the sign in -->
             <div class="row">
-            <div class="col-lg-4">
-                <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/216/216275.svg" alt="Generic placeholder image" width="140" height="140">
-                <h2>Easy to Use</h2>
-                <p>Plan your day effortlessly with Easy Planner.</p>
-                
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="rounded-circle" src="https://www.androidpolice.com/wp-content/uploads/2016/09/nexus2cee_circular_base.png" alt="Generic placeholder image" width="140" height="140">
-                <h2>Google Calendar</h2>
-                <p>Integrate with your Google Account.</p>
-                
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="rounded-circle" src="https://developer.apple.com/watchos/human-interface-guidelines/images/icon-and-image-large-icon-weather_2x.png" alt="Generic placeholder image" width="140" height="140">
-                <h2>Weather</h2> 
-                <!--https://upload.wikimedia.org/wikipedia/commons/b/bf/Circle-icons-weather.svg-->
-                <p>Know the weather outside to plan your day.</p>
-                
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="rounded-circle" src="http://www.proaimsresources.com/wp-content/uploads/Google-map.png" alt="Generic placeholder image" width="140" height="140">
-                <h2>Map</h2>
-                <p>Know the route to your destination</p>
-                
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/215/215824.svg" alt="Generic placeholder image" width="140" height="140">
-                <h2>Meal Time</h2>
-                <p>Choose from a list of restaurants, based on location to dine at.</p>
-                
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <img class="rounded-circle" src="https://pbs.twimg.com/profile_images/906098350235283456/Oyf51gU0_400x400.jpg" alt="Generic placeholder image" width="140" height="140">
-                <h2>Uber</h2>
-                <p>Book an Uber to reach your destination</p>
-            </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4 center-block text-center">
+                    <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/216/216275.svg" alt="Generic placeholder image" width="140" height="140">
+                    <h2>Easy to Use</h2>
+                    <p>Plan your day effortlessly with Easy Planner.</p>
+                    
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4 center-block text-center">
+                    <img class="rounded-circle" src="https://www.androidpolice.com/wp-content/uploads/2016/09/nexus2cee_circular_base.png" alt="Generic placeholder image" width="140" height="140">
+                    <h2>Google Calendar</h2>
+                    <p>Integrate with your Google Account.</p>
+                    
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4 center-block text-center">
+                    <img class="rounded-circle" src="https://developer.apple.com/watchos/human-interface-guidelines/images/icon-and-image-large-icon-weather_2x.png" alt="Generic placeholder image" width="140" height="140">
+                    <h2>Weather</h2> 
+                    <!--https://upload.wikimedia.org/wikipedia/commons/b/bf/Circle-icons-weather.svg-->
+                    <p>Know the weather outside to plan your day.</p>
+                    
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4 center-block text-center">
+                    <img class="rounded-circle" src="http://www.proaimsresources.com/wp-content/uploads/Google-map.png" alt="Generic placeholder image" width="140" height="140">
+                    <h2>Map</h2>
+                    <p>Know the route to your destination.</p>
+                    
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4 center-block text-center">
+                    <img class="rounded-circle" src="https://image.flaticon.com/icons/svg/215/215824.svg" alt="Generic placeholder image" width="140" height="140">
+                    <h2>Meal Time</h2>
+                    <p>Choose from a list of restaurants, based on location to dine at.</p>
+                    
+                </div><!-- /.col-lg-4 -->
+                <div class="col-lg-4 center-block text-center">
+                    <img class="rounded-circle" src="https://cdn-images-1.medium.com/max/1200/1*8rjrusrV_RohhhK3g5LvSA.png" alt="Generic placeholder image" width="140" height="140">
+                    <h2>Uber</h2>
+                    <p>Book an Uber to reach your destination.</p>
+                </div><!-- /.col-lg-4 -->
             </div><!-- /.row -->
-        </div><!-- marketing container -->        
+        </div><!-- marketing container -->
 
-        <div id="my-signin2" onclick="checksignin()"></div>
-        <a href="#" onclick="signOut()">Sign out</a>
+        <div class="container marketing">
+            <div class="row">
+                <div class="col-lg-4 offset-lg-4 center-block text-center">
+                    <div id="my-signin2" onclick="checksignin()"></div>
+                    <a href="#" onclick="signOut()">Sign out</a>
+                </div>
+            </div>
+        </div>
+
         <script>
             // Client ID and API key from the Developer Console
             var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
@@ -114,35 +117,35 @@
 
             var changepage = 0;
             function checksignin(){
-            changepage++;
-            renderButton();
+                changepage++;
+                renderButton();
             }
             function onSuccess(googleUser) {
-            console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-            if(changepage){
-                window.location.assign("index");
-            }
+                console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+                if(changepage){
+                    window.location.assign("index");
+                }
             }
             function onFailure(error) {
-            console.log(error);
+                console.log(error);
             }
             function renderButton() {
-            gapi.signin2.render('my-signin2', {
-                'scope': 'profile email https://www.googleapis.com/auth/calendar',
-                'width': 240,
-                'height': 50,
-                'longtitle': true,
-                'theme': 'dark',
-                'onsuccess': onSuccess,
-                'onfailure': onFailure
-            });
+                gapi.signin2.render('my-signin2', {
+                                    'scope': 'profile email https://www.googleapis.com/auth/calendar',
+                                    'width': 240,
+                                    'height': 50,
+                                    'longtitle': true,
+                                    'theme': 'dark',
+                                    'onsuccess': onSuccess,
+                                    'onfailure': onFailure
+                });
             }
             function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-            auth2.disconnect();
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth2.disconnect();
             }
         </script>
         
