@@ -11,11 +11,12 @@
 		<script src='{% static 'lib/moment.min.js' %}'></script>
 		<script src='{% static 'lib/jquery.min.js' %}'></script>
 		<script src='{% static 'moment-timezone-with-data.js' %}'></script>
-
+		
 		<!-- Google API scripts -->
 		<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places"></script>
 		<script src='{% static 'geolocation-marker.js' %}'></script>
+		<link href='{% static 'offcanvas.css' %}' rel='stylesheet' />
 		<script type="text/javascript">
 			// Client ID and API key from the Developer Console
 			var CLIENT_ID = '777718038660-mg1cq9kfcrt0fq4lrk681d9ualvcgrp1.apps.googleusercontent.com';
@@ -82,17 +83,27 @@
 				if (next == 1) {
 					var newDiv = document.createElement("div");
 					newDiv.className = "media text-muted pt-3";
+					divColor.style.backgroundColor = `#00FF00`;
 				}
 
 				var newStrong = document.createElement("strong");
 				newStrong.className = "text-gray-dark";
 
-				var when = event.start.dateTime;
-				if (!when) {
-					when = event.start.date;
+				var startTime = event.start.dateTime;
+				var endTime = event.end.dateTime;
+				if (!startTime) {
+					startTime = event.start.date;
+					endTime = event.end.date;
 				}
+				else{
+					startTime = startTime.replace("T", ", ");
+					startTime = startTime.slice(0, startTime.indexOf("+"));
+					endTime = endTime.replace("T", ", ");
+					endTime = endTime.slice(0, endTime.indexOf("+"));
+				}
+
 				var textContent;
-				textContent = document.createTextNode(event.summary + ' (' + when + ')' + '\n');
+				textContent = document.createTextNode(event.summary + ' (' + startTime + " to " + endTime  + ')' + '\n');
 				newStrong.appendChild(textContent);
 				if (next == 1) {
 					divColor.style.padding = "30px";
@@ -414,7 +425,13 @@
 				fjs.parentNode.insertBefore(js,fjs);}
 		}(document,'script','weatherwidget-io-js');
 		</script>
+		<div style="border-left:1px #c8c8c8 solid;background-color:#90D9F9;display:inline;float:left;width:50%;">
 
+			<iframe id="destinationMap" width="100%" height="800" frameborder="0" style="border:0"
+					src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
+			</div>
+
+			
 		<div class="task_box" style="display:inline;float:left;width:48%;margin-left:10px;">
 			<div class="my-3 p-3 bg-white rounded box-shadow">
 				<pre id="upcoming" style="border-bottom:1px #c8c8c8 solid;padding-bottom:5px;"></pre>
@@ -424,19 +441,15 @@
 				<div id="re_map" style="height:150px; width: 100%;"></div>
 				<div id="restaurants" class="resta_holder" style="width:100%;"> </div>
 			</div>
-		</div>
-			<div class="my-3 p-3 bg-white rounded box-shadow">
-				<pre id="soon"></pre>
-				<pre id="content" class="media text-muted pt-3"></pre>
+			</div>
+			<div class="my-3 p-3 bg-white rounded box-shadow" style="display: block">
+				<div id="soon"></div>
+				<div id="content" class="media text-muted pt-3"></div>
 			</div>
 
 		</div>
 
-		<div style="border-left:1px #c8c8c8 solid;background-color:#90D9F9;display:inline;float:right;width:50%;">
-
-		<iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
-				src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&q=Sydney" allowfullscreen></iframe>
-		</div>
+		
 
 	</body>
 </html>
