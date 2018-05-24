@@ -119,10 +119,10 @@ def request_uber(request):
     #destlng = round(float(destlng),7)
     #print(destlat,"=========destlat============")
     #print(destlng,"=========destlng============")
-    destlat = -33.8735656
-    destlng = 151.2070837
-    picklat = -33.9061325
-    picklng = 151.2348343
+    destlat = -33.873583
+    destlng = 151.207159
+    picklat = -33.917393
+    picklng = 151.233572
 
     UFP_PRODUCT_ID = '52bc2818-85d4-4231-be7e-86b8af2c6c2f'
 
@@ -133,15 +133,15 @@ def request_uber(request):
 
     product = client.get_product(product_id=UFP_PRODUCT_ID)
     #success_print(product.json)
-    paragraph_print("Request a ride with upfront pricing product.")
+    paragraph_print("==============================Request a ride with upfront pricing product.============================")
     ride_id = request_ufp_ride(client,picklat,picklng,destlat,destlng,UFP_PRODUCT_ID)
-    paragraph_print("Update ride status to accepted.")
+    paragraph_print("==============================Update ride status to accepted.==============================")
     update_ride(client, 'accepted', ride_id)
-    paragraph_print("Updated ride details.")
+    paragraph_print("==============================Updated ride details.==============================")
     get_ride_details(client, ride_id)
-    paragraph_print("Update ride status to completed.")
+    paragraph_print("==============================Update ride status to completed.==============================")
     update_ride(client, 'completed', ride_id)
-    paragraph_print("Updated ride details.")
+    paragraph_print("==============================Updated ride details.==============================")
     get_ride_details(client, ride_id)
     """estimate = client.estimate_ride(
                  product_id=UFP_PRODUCT_ID,
