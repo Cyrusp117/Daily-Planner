@@ -95,11 +95,8 @@
         </div><!-- marketing container -->
 
         <div class="container marketing">
-            <div class="row">
-                <div class="col-lg-4 offset-lg-4 center-block text-center">
-                    <div id="my-signin2" onclick="checksignin()"></div>
-                    <a href="#" onclick="signOut()">Sign out</a>
-                </div>
+            <div class="h-100 row align-items-center">
+                <div class="col-lg-4 offset-lg-4" id="my-signin2" onclick="checksignin()" style="padding:0px 0px 0px 70px;"></div>
             </div>
         </div>
 
@@ -139,13 +136,6 @@
                                     'onsuccess': onSuccess,
                                     'onfailure': onFailure
                 });
-            }
-            function signOut() {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function () {
-                    console.log('User signed out.');
-                });
-                auth2.disconnect();
             }
         </script>
         
