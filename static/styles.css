@@ -54,13 +54,6 @@ body {
   font-size: 14px;
 }
 
-div {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 2px;
-    padding-top: 2px;
-}
-
 form input,
 form textarea,
 form select {
@@ -75,5 +68,7 @@ form select {
 }
 
 .edittask {
-  margin: 10px 5%;
+  position: absolute;
+  top: 20%;
+  margin: 10px 5% ;
 }

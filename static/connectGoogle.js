@@ -74,6 +74,7 @@ $(document).ready(function () {
       center: 'title',
       right: 'month,agendaWeek,agendaDay'
     },
+    aspectRatio: 2,
     navLinks: true, // can click day/week names to navigate views
     selectable: true,
     selectHelper: true,
@@ -192,13 +193,13 @@ $(document).ready(function () {
     editable: true,
     eventLimit: true, // allow "more" link when too many events
     googleCalendarApiKey: 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg',
+    color: 'black',     // an option!
+    textColor: 'yellow', // an option!
     events: {
       googleCalendarId: 'en-gb.australian#holiday@group.v.calendar.google.com',
       editable: false,
       color: 'green'
     },
-    color: 'black',     // an option!
-    textColor: 'yellow' // an option!
   });
 });
 
