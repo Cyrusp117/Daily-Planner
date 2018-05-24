@@ -84,7 +84,7 @@ def fail_print(error):
         error (HTTPError)
             Error object to print.
     """
-    print(COLORS.fail, error.message, COLORS.end)
+    print(COLORS.fail, error, COLORS.end)
 
 
 def paragraph_print(message):
@@ -310,7 +310,7 @@ def update_ride(api_client, ride_status, ride_id):
         success_print(message)
 
 
-def request_ufp_ride(api_client):
+def request_ufp_ride(api_client,START_LAT,START_LNG,END_LAT,END_LNG,UFP_PRODUCT_ID):
     """Use an UberRidesClient to request a ride and print the results.
     Parameters
         api_client (UberRidesClient)

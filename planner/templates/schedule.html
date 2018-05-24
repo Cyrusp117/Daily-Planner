@@ -1,115 +1,104 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset='utf-8' />
-{% load static %}
-<link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
-<link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
-<script src='{% static 'lib/moment.min.js' %}'></script>
-<script src='{% static 'lib/jquery.min.js' %}'></script>
-<script src='{% static 'fullcalendar.js' %}'></script>
-<script src='{% static 'moment-timezone-with-data.js' %}'></script>
-<script type='text/javascript' src='{% static 'gcal.js' %}'></script>
+    <head>
+        <meta charset='utf-8' />
+        {% load static %}
+        <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
+        <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+        <script src='{% static 'lib/moment.min.js' %}'></script>
+        <script src='{% static 'lib/jquery.min.js' %}'></script>
+        <script src='{% static 'fullcalendar.js' %}'></script>
+        <script src='{% static 'moment-timezone-with-data.js' %}'></script>
+        <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
+        <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script src='{% static 'connectGoogle.js' %}'></script>
+    </head>
 
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
-<script src='{% static 'connectGoogle.js' %}'></script>
+    <body>
+        <!-- The Navbar -->
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark" style="height:50px;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">HOME</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'schedule' %}">SCHEDULE</a>
+                    </li>
+                    <li class="nav-item">
+                         <a class="nav-link" href="{% url 'edittask' %}">EDIT</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="mx-auto" href="#">
+                    <img src="{% static "BWLogo2.png" %}">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-<style>
-  /* The Modal (background) */
-  .modal {
-      display: none;
-      position: fixed; /* Stay in place */
-      z-index: 10; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-  }
-  
-  /* The Close Button */
-  .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-  }
-  </style>
+        <script>
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth2.disconnect();
+            }
+        </script>
+        <!-- End Of Navbar -->
 
-<style>
+        <!-- <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button> -->
+        <pre id="content"></pre>
 
-  body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-    font-size: 14px;
-  }
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+            <span class="close">&times;</span>
+            <i class="far fa-trash-alt" style="float: right"></i>
+            <div class="form-group">
+            <input id="eventTitle" class="form-control" placeholder="Enter Titile" type="text" name = "Title" >
+            </div>
+            <input type="button" class="btn btn-primary" style="width: 50%;"  id="Save" value="Save" >
+            <input type="button" class="btn btn-secondary" style="width: 50%;" id="Cancel" value="Cancel" >
+            <input type="button" class="btn btn-danger"  id="Delete" value="Delete" >
+            <input type="button" id="Map" value="Map" >
+            <a href="{% url 'uber' %}"> <input type="button" id="uber" value="Request an Uber" ></a>
+            <a href="edittask">More Options</a>
+            </div>
+        </div>
 
-  #calendar {
-    max-width: 900px;
-    margin: 0 auto;
-  }
+        <script async defer src="https://apis.google.com/js/api.js"
+                onload="this.onload=function(){};handleClientLoad()"
+                onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
 
-</style>
-</head>
-<body>
-  <script async defer src="https://apis.google.com/js/api.js"
-    onload="this.onload=function(){};handleClientLoad()"
-    onreadystatechange="if (this.readyState === 'complete') this.onload()">
-  </script>
-  <button onclick="handleSignInClick()" id="signin-button">Sign In</button>
-  <button onclick="handleSignOutClick()" id="signout-button">Sign Out</button>
-  <!-- <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button> -->
-  <pre id="content"></pre>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Event is</p>
-    <input id="eventTitle" type="text" name = "Title" >
-    <input type="button" id="Save" value="Save" >
-    <input type="button" id="Cancel" value="Cancel" >
-    <input type="button" id="Delete" value="Delete" >
-    <input type="button" id="Map" value="Map" >
-    <a href="{% url 'uber' %}"><button>Request an Uber</button></a>
-    <a href="edittask">More Options</a>
-  </div>
-</div>
-<!-- The Modal -->
-<div id="mapModel" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-  <iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0" 
-src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe> 
-  </div>
-</div>
-  <div id='calendar'></div>
-</div>
-</body>
+        <!-- The Modal -->
+        <div id="mapModel" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
+                        src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe>
+            </div>
+            </div>
+            <div id='calendar'></div>
+        </div>
+    </body>
 </html>

@@ -4,9 +4,10 @@ from . import views
 
 
 urlpatterns = [
-     url(r'^edittask$', views.edittask),
-     url(r'^schedule$', views.schedule),
-     url(r'^$', views.login),
+     url(r'^edittask$', views.edittask, name='edittask'),
+     url(r'^schedule$', views.schedule, name='schedule'),
+     url(r'^index$', views.index, name='index'),
+     url(r'^welcome$', views.welcome, name='welcome'),
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

@@ -40,7 +40,7 @@ function start() {
     console.log(response.result);
     handleSyncEvents()
   }, function (reason) {
-    console.log('Error: ');
+    console.log('Error: ' + reason);
   });
 };
 

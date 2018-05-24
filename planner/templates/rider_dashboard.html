@@ -2,9 +2,17 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        {% load static %}
+        <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
         <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg&libraries=places"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script type="text/javascript">
         function initialize() {
           var address = (document.getElementById('pickup-address'));
@@ -47,40 +55,110 @@
           });
         }
         function codeAddress() {
-          geocoder = new google.maps.Geocoder();
-          var address = document.getElementById("pickup-address").value;
-          geocoder.geocode( { 'address': address}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
+            geocoder = new google.maps.Geocoder();
+            var address = document.getElementById("pickup-address").value;
+            var dict = {}
+            geocoder.geocode( { 'address': address}, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
               //alert("Latitude: "+results[0].geometry.location.lat());
               //alert("Longitude: "+results[0].geometry.location.lng());
-              var picklat = results[0].geometry.location.lat();
-              var picklng = results[0].geometry.location.lng();
-            }else {
-              alert("Geocode was not successful for the following reason: " + status);
-            }
-          });
-        }
-        function codeAddress2() {
-          geocoder = new google.maps.Geocoder();
-          var address = document.getElementById("destination").value;
-          geocoder.geocode( { 'address': address}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
+                var picklat = results[0].geometry.location.lat();
+                var picklng = results[0].geometry.location.lng();
+                //updateLatLng1(picklat,picklng);
+              }else {
+                  //alert("Geocode was not successful for the following reason: " + status);
+              }
+            });
+            var address2 = document.getElementById("destination").value;
+            geocoder.geocode( { 'address': address2}, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
               //alert("Latitude: "+results[0].geometry.location.lat());
               //alert("Longitude: "+results[0].geometry.location.lng());
-              var destlat = results[0].geometry.location.lat();
-              var destlng = results[0].geometry.location.lng();
-              alert("Latitude--: "+destlat);
-              alert("Latitude--: "+destlng);
-            }else {
-              alert("Geocode was not successful for the following reason: " + status);
-            }
-          });
+                destlat = results[0].geometry.location.lat();
+                destlng = results[0].geometry.location.lng();
+                updateLatLng2(destlat,destlng);
+              }else {
+                  //alert("Geocode was not successful for the following reason: " + status);
+              }
+            });
         }
         google.maps.event.addDomListener(window, 'load', initialize);
         google.maps.event.addDomListener(window, 'load', initialize2);
+
+        function updateLatLng1(picklat, picklng) {
+        var data = {'picklat': picklat, 'picklng': picklng};
+        $.ajax({
+                url: "{% url 'request_uber' %}",
+                type: "POST",
+                data: {
+                    picklat: data['picklat'],
+                    picklng: data['picklng'],
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                cache: false,
+                success : function(json) {
+                    //alert("Successfully sent the URL to Django");
+                },
+                error : function(xhr,errmsg,err) {
+                    //alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                }
+            });
+    };
+    function updateLatLng2(destlat, destlng) {
+        var data = {'destlat': destlat, 'destlng': destlng};
+        $.ajax({
+                url: "{% url 'request_uber' %}",
+                type: "POST",
+                data: {
+                    destlat: data['destlat'],
+                    destlng: data['destlng'],
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                cache: false,
+                success : function(json) {
+                    //alert("Successfully sent the URL to Django");
+                },
+                error : function(xhr,errmsg,err) {
+                    //alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                }
+            });
+    };
         </script>
     </head>
 <body>
+
+  <!-- The Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="height:50px;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">HOME</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'schedule' %}">SCHEDULE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'edittask' %}">EDIT</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="mx-auto" href="#">
+                    <img src="{% static "BWLogo2.png" %}">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
   <div class="container">
     <header>
         <a href="https://riders.uber.com/">
@@ -89,8 +167,8 @@
 
         <p><input type="text" style="width: 300px;" id="pickup-address"></p>
         <p><input type="text" style="width: 300px;" id="destination"></p>
-        <a href="{% url 'schedule' %}"><button id="cancel_request" >Cancel</button></a>
-        <a href="{% url 'request_uber' %}"><button id="requestUber" onClick="codeAddress();codeAddress2();">Request a Uber</button></a>
+        <a href="{% url 'schedule' %}"> <input type="button" id="cancel_request" value="Cancel" ></a>
+        <a href="{% url 'request_uber' %}"> <input type="button" id="requestUber" onClick="codeAddress();" value="Request a Uber" ></a>
 
     </header>
   </div>

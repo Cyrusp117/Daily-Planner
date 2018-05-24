@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
 
+
 def edittask(request):
     now = datetime.now()
     taskTitle = ''
@@ -25,14 +26,13 @@ def edittask(request):
     }
     return render(request, 'edit_task.html', context)
 
-
-def login(request):
-
-    context = {}
-    return render(request, 'Login.html', context)
-
 def schedule(request):
-
     context = {}
     return render(request, 'schedule.html', context)
 
+def index(request):
+    return render(request, 'index.html')
+
+def welcome(request):
+    context = {}
+    return render(request, 'welcome.html', context)
