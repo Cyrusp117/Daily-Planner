@@ -87,12 +87,21 @@
 				var newStrong = document.createElement("strong");
 				newStrong.className = "text-gray-dark";
 
-				var when = event.start.dateTime;
-				if (!when) {
-					when = event.start.date;
+				var startTime = event.start.dateTime;
+				var endTime = event.end.dateTime;
+				if (!startTime) {
+					startTime = event.start.date;
+					endTime = event.end.date;
 				}
+				else{
+					startTime = startTime.replace("T", ", ");
+					startTime = startTime.slice(0, startTime.indexOf("+"));
+					endTime = endTime.replace("T", ", ");
+					endTime = endTime.slice(0, endTime.indexOf("+"));
+				}
+
 				var textContent;
-				textContent = document.createTextNode(event.summary + ' (' + when + ')' + '\n');
+				textContent = document.createTextNode(event.summary + ' (' + startTime + " to " + endTime  + ')' + '\n');
 				newStrong.appendChild(textContent);
 				if (next == 1) {
 					divColor.style.padding = "30px";
