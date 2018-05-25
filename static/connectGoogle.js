@@ -74,11 +74,8 @@ $(document).ready(function () {
       center: 'title',
       right: 'month,agendaWeek,agendaDay,listWeek'
     },
-<<<<<<< HEAD
-=======
     theme: true,    
     themeSystem:'bootstrap4',       
->>>>>>> master
     aspectRatio: 2,
     navLinks: true, // can click day/week names to navigate views
     selectable: true,
@@ -138,7 +135,7 @@ $(document).ready(function () {
       var mapModel = document.getElementById('mapModel');
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-      var span2 = document.getElementsByClassName("close")[3];
+      var span2 = document.getElementsByClassName("close")[4];
       var title = document.getElementById("eventTitle");
       var save = document.getElementById("Save");
       var cancel = document.getElementById("Cancel");
