@@ -61,6 +61,7 @@
         <div class="container marketing">
             <div  align="center">
                 <div id="my-signin2" onclick="checksignin()"></div>
+                <a href="" onclick="signOut()">Sign out </a>
             </div>
             <!-- Three columns of text below the sign in -->
             <div class="row">
@@ -114,7 +115,13 @@
             // Authorization scopes required by the API; multiple scopes can be
             // included, separated by spaces.
             var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
-
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth2.disconnect();
+            }
             var changepage = 0;
             function checksignin(){
                 changepage++;
