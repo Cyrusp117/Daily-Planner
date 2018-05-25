@@ -74,11 +74,8 @@ $(document).ready(function () {
       center: 'title',
       right: 'month,agendaWeek,agendaDay,listWeek'
     },
-<<<<<<< HEAD
-=======
     theme: true,    
     themeSystem:'bootstrap4',       
->>>>>>> master
     aspectRatio: 2,
     navLinks: true, // can click day/week names to navigate views
     selectable: true,
