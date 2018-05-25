@@ -19,7 +19,7 @@
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 30%;
 }
 
 /* The Close Button */
@@ -48,17 +48,10 @@ a.button {
 }
 
 body {
-  margin: 40px 10px;
-  padding: 0;
-  font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-  font-size: 14px;
-}
-
-div {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 2px;
-    padding-top: 2px;
+    margin: 40px 10px;
+    padding: 0;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 14px;
 }
 
 form input,
@@ -75,5 +68,7 @@ form select {
 }
 
 .edittask {
-  margin: 10px 5%;
+  position: absolute;
+  top: 20%;
+  margin: 10px 5% ;
 }
