@@ -209,6 +209,7 @@
 				x.appendChild(loc_span)
 				document.getElementById("restaurants").appendChild(x);
 			}
+			var col1 = 1;
 			function addrestaurant(restaurant){
 				var x = document.createElement("DIV");
 				x.className = "res_box";
@@ -240,7 +241,14 @@
 				loc_span.appendChild(document.createElement("br"));
 				loc_span.appendChild(rating);
 				x.appendChild(loc_span)
-				document.getElementById("restaurants").appendChild(x);
+				if(col1 === 1){
+					document.getElementById("restaurants").appendChild(x);
+					col1 = 0;
+				}
+				else{
+					col1 = 1;
+					document.getElementById("restaurants2").appendChild(x);
+				}
 			}
 
 			function initMap() {
@@ -379,7 +387,7 @@
 			div.resta_holder{
 				overflow: scroll;
 				height: 300px;
-				width: 400px;
+				width: 50%;
 				border: 1px solid rgba(245, 245, 245, 0.911);
 				box-shadow: 1px 2px whitesmoke;
 			}
@@ -459,7 +467,10 @@
 			<div class="my-3 p-3 bg-white rounded box-shadow">
 			<div id="restaurant_box" style="display:none" >
 				<div id="re_map" style="height:150px; width: 100%;"></div>
-				<div id="restaurants" class="resta_holder" style="width:100%;"> </div>
+				<div style="display:flex">
+					<div id="restaurants" class="resta_holder" style="width:50%;"> </div>
+					<div id="restaurants2" class="resta_holder" style="width:50%;"> </div>
+				</div>
 			</div>
 			</div>
 			<div class="my-3 p-3 bg-white rounded box-shadow" style="display: block">
