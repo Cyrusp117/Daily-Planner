@@ -87,6 +87,7 @@
                 <div class="form-group" style="display: inline">
                     <span class="close" style="font-size:30px; float: left" id="Cancel" >&times;</span>
                     <input  type="image" value="map" id="Map" class="material-icons close" style="font-size:30px; float: left">
+                    <a href="{% url 'uber' %}"><input type="image"  id="uber" class="close" width="30" height="30" src="{% static "/images/Uber_App_Icon.svg.png" %}" style = "float: left"  /></a>
                     <span id="Delete" class="close" style="float: right"><i class="fa fa-trash" aria-hidden="true"></i></span>
                 </div>
                 <div class="form-group">
@@ -95,9 +96,6 @@
                 <div  style="display: inline;">
                     <input type="button" class="btn btn-primary" style="width: 30%;"  id="Save" value="Save" >
                     <a href="edittask" style="top: 80px">More Options</a>
-                </div>
-                <div class="form-group">
-                    <a href="{% url 'uber' %}"> <input type="button" class="btn btn-info" style="width: 30%;" id="uber" value="Request an Uber" ></a>
                 </div>
             </div>
         </div>
