@@ -72,8 +72,10 @@ $(document).ready(function () {
     header: {
       left: 'prev,next today',
       center: 'title',
-      right: 'month,agendaWeek,agendaDay'
+      right: 'month,agendaWeek,agendaDay,listWeek'
     },
+    theme: true,    
+    themeSystem:'bootstrap4',       
     aspectRatio: 2,
     navLinks: true, // can click day/week names to navigate views
     selectable: true,
