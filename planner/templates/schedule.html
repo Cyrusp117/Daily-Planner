@@ -20,6 +20,18 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src='{% static 'connectGoogle.js' %}'></script>
         <title>Schedule</title>
+
+        <style>
+            body {
+                background-image: url("../static/images/ScheduleBG.jpg");
+                background-repeat:no-repeat;
+                background-position:center center;
+                -o-background-size: 100% 100%, auto;
+                -moz-background-size: 100% 100%, auto;
+                -webkit-background-size: 100% 100%, auto;
+                background-size: 100% 100%, auto;
+            }
+        </style>
     </head>
 
     <body>
@@ -40,7 +52,7 @@
             </div>
             <div class="mx-auto my-2 order-0 order-md-1 position-relative">
                 <a class="mx-auto" href="#" style="pointer-events:none;cursor:default;">
-                    <img src="{% static "BWLogo2.png" %}">
+                    <img src="{% static "images/BWLogo2.png" %}">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                     <span class="navbar-toggler-icon"></span>
@@ -48,7 +60,7 @@
             </div>
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
                     </li>
                 </ul>
@@ -73,9 +85,9 @@
             <!-- Modal content -->
             <div class="modal-content" style="width: 50%">
                 <div class="form-group" style="display: inline">
-                    <span class="close" id="Cancel" >&times;</span>
-                    <input  type="image" value="map" id="Map" class="material-icons" style="font-size:30px; float: right">
-                    <span id="Delete" class="close" style="float: left"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                    <span class="close" style="font-size:30px; float: left" id="Cancel" >&times;</span>
+                    <input  type="image" value="map" id="Map" class="material-icons close" style="font-size:30px; float: left">
+                    <span id="Delete" class="close" style="float: right"><i class="fa fa-trash" aria-hidden="true"></i></span>
                 </div>
                 <div class="form-group">
                     <input id="eventTitle" class="form-control" placeholder="Enter Titile" type="text" name = "Title" >
@@ -101,7 +113,7 @@
                         src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe>
             </div>
             </div>
-            <div id='calendar'></div>
+            <div id='calendar' style=" margin-right: 11%;margin-left: 11%"></div>
         </div>
         
     </body>

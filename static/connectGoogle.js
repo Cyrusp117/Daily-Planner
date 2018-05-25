@@ -74,6 +74,7 @@ $(document).ready(function () {
       center: 'title',
       right: 'month,agendaWeek,agendaDay'
     },
+    aspectRatio: 2,
     navLinks: true, // can click day/week names to navigate views
     selectable: true,
     selectHelper: true,
@@ -132,7 +133,7 @@ $(document).ready(function () {
       var mapModel = document.getElementById('mapModel');
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-      var span2 = document.getElementsByClassName("close")[2];
+      var span2 = document.getElementsByClassName("close")[3];
       var title = document.getElementById("eventTitle");
       var save = document.getElementById("Save");
       var cancel = document.getElementById("Cancel");
@@ -192,13 +193,13 @@ $(document).ready(function () {
     editable: true,
     eventLimit: true, // allow "more" link when too many events
     googleCalendarApiKey: 'AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg',
+    color: 'black',     // an option!
+    textColor: 'yellow', // an option!
     events: {
       googleCalendarId: 'en-gb.australian#holiday@group.v.calendar.google.com',
       editable: false,
       color: 'green'
     },
-    color: 'black',     // an option!
-    textColor: 'yellow' // an option!
   });
 });
 

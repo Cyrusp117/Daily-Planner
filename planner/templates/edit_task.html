@@ -21,7 +21,7 @@
         <title>Edit Task</title>
         <style>
             body {
-                background-image: url("http://ikconinfotech.com/blog/wp-content/uploads/2018/03/web-designer-pune-background.jpg");
+                background-image: url("../static/images/EditTaskBG.jpg");
                 width: 100%;
                 height: 100%;
             }
@@ -359,7 +359,7 @@
             </div>
             <div class="mx-auto my-2 order-0 order-md-1 position-relative">
                 <a class="mx-auto" href="#" style="pointer-events:none;cursor:default;">
-                    <img src="{% static "BWLogo2.png" %}">
+                    <img src="{% static "images/BWLogo2.png" %}">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
                     <span class="navbar-toggler-icon"></span>
@@ -367,7 +367,7 @@
             </div>
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="welcome" onclick="signOut();">LOGOUT</a>
                     </li>
                 </ul>
@@ -393,20 +393,24 @@
         <div class="edittask">
             <!--<p>{{taskTitle}} </p>-->
             <form id="taskform" method="POST">
-                <i name="cancelBtn" style="cursor:pointer;font-size:20px;margin:0px 5px;" onclick="backToSchedule()" class="fas fa-times"></i>
                 {% csrf_token %}
-                <input class="form-control" style="width:200px;display:inline;" type="text" name="taskTitle" placeholder="Enter title of task">
-                <input type="button" class="btn btn-primary" name="saveBtn" value="Save" onclick="saveTask()">
-                <input type="button" class="btn" name="delBtn" value="Delete" onclick="deleteTask()"><br>
-                <!--<input type="button" name="cancelBtn" value="Cancel" onclick="backToSchedule()">-->
-                <input class="form-control" style="width:150px;display:inline;" type="date" name="f_date" >
-                <input class="form-control" style="width:100px;display:inline;" type="time" name="f_time" ></label>
-                <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
-                <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
-                <div style="display:inline-block;margin-left:0px;padding-left:0px;">
-                    <input class="form-control" style="width:150px;display:inline;" type="date" name="t_date">
-                    <input class="form-control" style="width:100px;display:inline;" type="time"  name="t_time">
-                </div><br>
+                <div class="form-group">
+                    <i name="cancelBtn" style="cursor:pointer;font-size:20px;margin:0px 5px;" onclick="backToSchedule()" class="fas fa-times"></i>
+                    <input type="text" name="taskTitle" placeholder="Enter title of task">
+                    <input type="button" class="btn btn-primary" name="saveBtn" value="Save" onclick="saveTask()">
+                    <input type="button" class="btn btn-danger" name="delBtn" value="Delete" onclick="deleteTask()"><br>
+                </div>
+                
+                <div class="form-group">
+                    <!--<input type="button" name="cancelBtn" value="Cancel" onclick="backToSchedule()">-->
+                    <input type="date" name="f_date" >
+                    <input type="time" name="f_time" >
+                    <!-- TODO using JS to set constraints for time input, and autoset t_time as f_time + 1hour-->
+                    <!-- CANDO using JS to recreate entire time list, so performance won't vary from browser-->
+                    <label for="to time">to</label>
+                        <input type="date" name="t_date">
+                        <input type="time"  name="t_time">
+                </div>
                 <div style="margin-top:5px;"></div>
                 <label for="Allday">All Day:
                     <input style="vertical-align:middle;" type="checkbox" name="all_day" onclick="checkallday()">
@@ -416,8 +420,10 @@
                     <option value="others">Other</option>
                     <option value="mealtime">Mealtime</option>
                 </select><br><br>
+                <br>
                 <div style="border-top:1px solid #c8c8c8;"></div><br>
                 <input class="form-control" style="width:400px;" type="text" name="destination" placeholder="Enter destination of task">
+                <br>
                 <textarea class="form-control" style="width:400px;" type="text" name="description" placeholder="Enter description of task" cols="40" rows="3"></textarea>
             </form>
         </div>
