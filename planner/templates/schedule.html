@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8' />
+        {% load static %}
+        <link href='{% static 'fullcalendar.css' %}' rel='stylesheet' />
+        <link href='{% static 'fullcalendar.print.css' %}' rel='stylesheet' media='print' />
+        <script src='{% static 'lib/moment.min.js' %}'></script>
+        <script src='{% static 'lib/jquery.min.js' %}'></script>
+        <script src='{% static 'fullcalendar.js' %}'></script>
+        <script src='{% static 'moment-timezone-with-data.js' %}'></script>
+        <script type='text/javascript' src='{% static 'gcal.js' %}'></script>
+        <link href='{% static 'styles.css' %}' rel='stylesheet'/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <meta name="google-signin-client_id" content="777718038660-ob329re48n6vapuo4ebah4ssq5gdqrvn.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/api.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src='{% static 'connectGoogle.js' %}'></script>
+        <title>Schedule</title>
+
+        <style>
+            body {
+                background-image: url("../static/images/WelcomeBG.jpg");
+                background-repeat:no-repeat;
+                background-position:center center;
+                width: 100%;
+                height: 100%;
+                }
+        </style>
+    </head>
+
+    <body>
+        <!-- The Navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="height:50px;">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">HOME</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'schedule' %}" style="pointer-events:none;cursor:default;">SCHEDULE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'edittask' %}">EDIT</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+                <a class="mx-auto" href="#" style="pointer-events:none;cursor:default;">
+                    <img src="{% static "images/BWLogo2.png" %}">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'welcome' %}" onclick="signOut();">LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <script>
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                });
+                auth2.disconnect();
+            }
+        </script>
+        <!-- End Of Navbar -->
+
+        <!-- <button id="sync-events" onclick="handleSyncEvents()">Sync Google Calendar</button> -->
+        <pre id="content"></pre>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content" style="width: 50%">
+                <div class="form-group" style="display: inline">
+                    <span class="close" style="font-size:30px; float: left" id="Cancel" >&times;</span>
+                    <span id="Map" class="close" style=" float: left" ><i class="material-icons" style="font-size:30px;">map</i></span>
+                    <a href="{% url 'uber' %}"><input type="image"  id="uber" class="close" width="30" height="30" src="{% static "/images/Uber_App_Icon.svg.png" %}" style = "float: left"  /></a>
+                    <span id="Delete" class="close" style="float: right"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                </div>
+                <div class="form-group">
+                    <input id="eventTitle" class="form-control" placeholder="Enter Titile" type="text" name = "Title" >
+                </div>
+                <div  style="display: inline;">
+                    <input type="button" class="btn btn-primary" style="width: 30%;"  id="Save" value="Save" >
+                    <a href="{% url 'edittask' %}" style="top: 80px">More Options</a>
+                </div>
+            </div>
+        </div>
+
+        <script async defer src="https://apis.google.com/js/api.js"
+                onload="this.onload=function(){};handleClientLoad()"
+                onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
+
+        <!-- The Modal -->
+        <div id="mapModel" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <iframe id="destinationMap" width="100%" height="600" frameborder="0" style="border:0"
+                        src="https://www.google.com/maps/embed/v1/place?q=Sydney&key=AIzaSyAB7Zfk1cIw5ejq6x8Kol3qwNCv7R0NTJg" allowfullscreen></iframe>
+            </div>
+            </div>
+            <div id='calendar' style=" margin-right: 11%;margin-left: 11%"></div>
+        </div>
+        
+    </body>
+</html>
